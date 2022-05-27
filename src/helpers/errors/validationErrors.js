@@ -3,7 +3,7 @@ function validationErrors({ errors }) {
     const errorsData = keys.map(item => ({
         field: item,
         message: errors[item].message
-    }))
+    })) 
 
     return {
         success: false,
