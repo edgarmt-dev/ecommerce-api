@@ -5,13 +5,15 @@ const pkg = require('../package.json')
 const app = express()
 app.set('pkg', pkg)
 
-//TODO:Routes import
+//Routes import
+const auth = require('./routes/auth')
 
 //Middlewares
 app.use(morgan('dev'))
 app.use(express.json())
 
-// TODO:Routes
+//Routes
+auth(app)
 
 app.get('/', (req, res) => {
     const data = {
