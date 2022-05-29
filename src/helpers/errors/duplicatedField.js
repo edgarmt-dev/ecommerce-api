@@ -4,7 +4,8 @@ function duplicatedField(error) {
     }))
     return {
         success: false,
-        errors
+        errors,
+        code: 400
     }
 }
 

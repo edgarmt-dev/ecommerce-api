@@ -9,12 +9,16 @@ function auth(app) {
 
     router.post('/login', async (req, res) => {
         const result = await authService.logIn(req.body)
-        return res.json(result)
+        return res
+            .status(result.success ? 200 : 400)
+            .json(result)
     })
 
     router.post('/register', async (req, res) => {
         const result = await authService.register(req.body)
-        res.status(200).json(result)
+        return res
+            .status(result.code ? result.code : 200)
+            .json(result)
     })
 }
 

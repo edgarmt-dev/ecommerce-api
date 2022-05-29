@@ -1,9 +1,9 @@
 const User = require('./user')
 const bcrypt = require('bcrypt')
-const res = require('express/lib/response')
+const jsonwebtoken = require('jsonwebtoken')
+const { jwtSecret } = require('../config')
 
 class Auth {
-
     constructor() {
         this.userService = new User()
     }
@@ -13,8 +13,13 @@ class Auth {
         return await bcrypt.hash(password, salt)
     }
 
-    async #comparePassword(password, passwordEncrypt) {
+    async #compare(password, passwordEncrypt) {
         return await bcrypt.compare(password, passwordEncrypt)
+    }
+
+    #getToken(user) {
+        const token = jsonwebtoken.sign(user, jwtSecret)
+        return { success: true, user, token }
     }
 
     async logIn(credentials) {
@@ -26,28 +31,36 @@ class Auth {
                 messsage: 'User not found'
             }
 
-            const compare = await this.#comparePassword(password, user.password)
+            const compare = await this.#compare(password, user.password)
 
             if (!compare) return {
                 success: false,
                 message: 'Invalid credentials'
             }
-            return { success: true, user }
+            return this.#buildUserData({ user })
         } catch (error) {
             console.log(error);
         }
     }
 
     async register(data) {
-        try {
-            if (data && data.password) {
-                data.password = await this.#encrypt(data.password)
-            }
-            const result = await this.userService.create(data)
-            return result
-        } catch (error) {
-            console.log(error)
+        if (data && data.password) {
+            data.password = await this.#encrypt(data.password)
         }
+        const result = await this.userService.create(data)
+        if (!result.success) return result
+        return this.#buildUserData(result)
+    }
+
+    #buildUserData({ user }) {
+        // TODO: res with cookies
+        const data = {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        }
+        return this.#getToken(data)
     }
 }
 
