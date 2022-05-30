@@ -7,6 +7,7 @@ app.set('pkg', pkg)
 
 //Routes import
 const auth = require('./routes/auth')
+const user = require('./routes/user')
 
 //Middlewares
 app.use(morgan('dev'))
@@ -14,6 +15,7 @@ app.use(express.json())
 
 //Routes
 auth(app)
+user(app)
 
 app.get('/', (req, res) => {
     const data = {

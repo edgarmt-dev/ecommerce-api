@@ -3,6 +3,14 @@ const UserModel = require("../models/user");
 
 class User {
 
+    async getAll() {
+        try {
+            return await UserModel.find()
+        } catch (error) {
+            return error
+        }
+    }
+
     async getOneByEmail(email) {
         try {
             const result = await UserModel.findOne({ email: email })

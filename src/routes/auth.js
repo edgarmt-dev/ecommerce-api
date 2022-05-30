@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { tokenToCookie, deleteCookie } = require("../helpers/auth/tokenToCookie");
 const Auth = require("../services/auth");
 
 function auth(app) {
@@ -9,16 +10,16 @@ function auth(app) {
 
     router.post('/login', async (req, res) => {
         const result = await authService.logIn(req.body)
-        return res
-            .status(result.success ? 200 : 400)
-            .json(result)
+        return tokenToCookie(res, result, 401)
     })
 
     router.post('/register', async (req, res) => {
         const result = await authService.register(req.body)
-        return res
-            .status(result.code ? result.code : 200)
-            .json(result)
+        return tokenToCookie(res, result, 401)
+    })
+
+    router.get('/logout', (req, res) => {
+        return deleteCookie(res)
     })
 }
 

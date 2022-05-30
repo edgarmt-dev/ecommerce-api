@@ -1,6 +1,6 @@
 const User = require('./user')
 const bcrypt = require('bcrypt')
-const jsonwebtoken = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 const { jwtSecret } = require('../config')
 
 class Auth {
@@ -18,7 +18,7 @@ class Auth {
     }
 
     #getToken(user) {
-        const token = jsonwebtoken.sign(user, jwtSecret)
+        const token = jwt.sign(user, jwtSecret)
         return { success: true, user, token }
     }
 
