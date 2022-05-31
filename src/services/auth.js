@@ -39,7 +39,7 @@ class Auth {
             }
             return this.#buildUserData({ user })
         } catch (error) {
-            console.log(error);
+            return error
         }
     }
 
@@ -62,15 +62,13 @@ class Auth {
                 name: data.displayName
             }
             const result = await this.userService.getOrCreate(user)
-            console.log(result);
             return this.#buildUserData(result)
         } catch (error) {
-            console.log(error);
+            return error
         }
     }
 
     #buildUserData({ user }) {
-        console.log(user);
         const data = {
             id: user._id,
             name: user.name,
