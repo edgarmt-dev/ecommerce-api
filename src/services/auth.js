@@ -18,7 +18,9 @@ class Auth {
     }
 
     #getToken(user) {
-        const token = jwt.sign(user, jwtSecret)
+        const token = jwt.sign(user, jwtSecret, {
+            expiresIn: '2d'
+        })
         return { success: true, user, token }
     }
 

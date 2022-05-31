@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const passport = require('passport')
 const { useGoogleStrategy } = require('./middlewares/authProvider')
+const { jwtSecret } = require('./config')
 
 const app = express()
 app.set('pkg', pkg)
@@ -12,7 +13,7 @@ app.set('pkg', pkg)
 //Routes import
 const auth = require('./routes/auth')
 const user = require('./routes/user')
-const { jwtSecret } = require('./config')
+const product = require('./routes/product')
 
 //Middlewares
 app.use(morgan('dev'))
@@ -23,6 +24,8 @@ app.use(cors({
     credentials: true
 }))
 app.use(passport.initialize())
+
+//Strategies Auth
 passport.use(useGoogleStrategy())
 passport.serializeUser((user, done) => {
     done(null, user)
@@ -31,6 +34,7 @@ passport.serializeUser((user, done) => {
 //Routes
 auth(app)
 user(app)
+product(app)
 
 app.get('/', (req, res) => {
     const data = {
