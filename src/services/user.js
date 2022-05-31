@@ -1,5 +1,6 @@
 const hasErrors = require("../helpers/errors/hasErrors");
 const UserModel = require("../models/user");
+const uuid = require('uuid')
 
 class User {
 
@@ -26,6 +27,25 @@ class User {
             return {
                 success: true,
                 user
+            }
+        } catch (error) {
+            return hasErrors(error)
+        }
+    }
+
+    async getOrCreate(data) {
+        try {
+            const user = await UserModel.findOne({ 
+                idProvider: data.idProvider, 
+                provider: data.provider 
+            })
+            if (user) return {success:true, user}
+
+            data.password = uuid.v4()
+            const result = await UserModel.create(data)
+            return  {
+                success: true,
+                user: result
             }
         } catch (error) {
             return hasErrors(error)

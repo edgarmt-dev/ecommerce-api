@@ -52,8 +52,25 @@ class Auth {
         return this.#buildUserData(result)
     }
 
+    async authProvider(data) {
+        try {
+            const user = {
+                idProvider: data.id,
+                provider: data.provider,
+                profilePic: data.photos[0].value,
+                email: data.emails[0].value,
+                name: data.displayName
+            }
+            const result = await this.userService.getOrCreate(user)
+            console.log(result);
+            return this.#buildUserData(result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     #buildUserData({ user }) {
-        // TODO: res with cookies
+        console.log(user);
         const data = {
             id: user._id,
             name: user.name,
