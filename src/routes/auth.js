@@ -31,8 +31,21 @@ function auth(app) {
         failureRedirect: '/'
     }),
         async (req, res) => {
-            const result = await authService.authProvider(req.user.profile)
+            const result = await authService.authWithProvider(req.user.profile)
             return tokenToCookie(res, result)
+        })
+
+    router.get('/facebook', passport.authenticate('facebook'))
+
+    router.get('/facebook/callback', passport.authenticate('facebook', {
+        session: false,
+        failureRedirect: '/'
+    }),
+        (req, res) => {
+            return res.json({
+                success: true,
+                message: 'logged successfully'
+            })
         })
 }
 

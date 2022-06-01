@@ -37,7 +37,7 @@ class Auth {
 
             if (!compare) return {
                 success: false,
-                message: 'Invalid credentials'
+                message: ['Invalid credentials']
             }
             return this.#buildUserData({ user })
         } catch (error) {
@@ -54,7 +54,7 @@ class Auth {
         return this.#buildUserData(result)
     }
 
-    async authProvider(data) {
+    async authWithProvider(data) {
         try {
             const user = {
                 idProvider: data.id,

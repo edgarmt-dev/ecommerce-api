@@ -11,6 +11,8 @@ const config = {
     jwtSecret: process.env.JWT_SECRET,
     oAuthClientID: process.env.OAUTH_CLIENT_ID,
     oAuhtClientSecret: process.env.OAUTH_CLIENT_SECRET,
+    fbAppID: process.env.FACEBOOK_APP_ID,
+    fbAppSecret: process.env.FACEBOOK_APP_SECRET,
     callbackURL: process.env.CALLBACK_URL,
     calllbackURLDev: process.env.CALLBACK_URL_DEV
 }
