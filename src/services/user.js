@@ -34,22 +34,14 @@ class User {
     }
 
     async getOrCreate(data) {
-        try {
-            const user = await UserModel.findOne({ 
-                idProvider: data.idProvider, 
-                provider: data.provider 
-            })
-            if (user) return {success:true, user}
+        const user = await UserModel.findOne({
+            idProvider: data.idProvider,
+            provider: data.provider
+        })
+        if (user) return { success: true, user }
 
-            data.password = uuid.v4()
-            const result = await UserModel.create(data)
-            return  {
-                success: true,
-                user: result
-            }
-        } catch (error) {
-            return hasErrors(error)
-        }
+        data.password = uuid.v4()
+        return await this.create(data)
     }
 }
 

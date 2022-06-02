@@ -55,19 +55,18 @@ class Auth {
     }
 
     async authWithProvider(data) {
-        try {
-            const user = {
-                idProvider: data.id,
-                provider: data.provider,
-                profilePic: data.photos[0].value,
-                email: data.emails[0].value,
-                name: data.displayName
-            }
-            const result = await this.userService.getOrCreate(user)
-            return this.#buildUserData(result)
-        } catch (error) {
-            return error
+        const user = {
+            idProvider: data.id,
+            provider: data.provider,
+            profilePic: data.photos[0].value,
+            email: data.emails[0].value,
+            name: data.displayName
         }
+        const result = await this.userService.getOrCreate(user)
+        if (result.success) {
+            return this.#buildUserData(result)
+        }
+        return result
     }
 
     #buildUserData({ user }) {

@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const { tokenToCookie, deleteCookie } = require("../helpers/auth/tokenToCookie");
 const Auth = require("../services/auth");
-const passport = require('passport')
+const passport = require('passport');
+const authValidation = require("../middlewares/auth");
 
 function auth(app) {
     const router = Router()
@@ -16,6 +17,13 @@ function auth(app) {
     router.post('/register', async (req, res) => {
         const result = await authService.register(req.body)
         return tokenToCookie(res, result, 401)
+    })
+
+    router.get('/validate', authValidation(1), (req, res) => {
+        return res.json({
+            success: true,
+            user: req.user
+        })
     })
 
     router.get('/logout', (req, res) => {
@@ -35,17 +43,18 @@ function auth(app) {
             return tokenToCookie(res, result)
         })
 
-    router.get('/facebook', passport.authenticate('facebook'))
+    router.get('/facebook', passport.authenticate('facebook', {
+        scope: ['email']
+    }))
 
     router.get('/facebook/callback', passport.authenticate('facebook', {
         session: false,
         failureRedirect: '/'
     }),
-        (req, res) => {
-            return res.json({
-                success: true,
-                message: 'logged successfully'
-            })
+        async (req, res) => {
+            const result = await authService.authWithProvider(req.user.profile)
+            if (result.success) return tokenToCookie(res, result.user)
+            return res.json(result)
         })
 }
 

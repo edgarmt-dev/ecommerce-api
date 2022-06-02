@@ -20,6 +20,8 @@ const validateToken = (req, res, next) => {
 const verifyToken = (token, req, res, next) => {
     try {
         const decoded = jsonwebtoken.verify(token, jwtSecret)
+        delete decoded.iat
+        delete decoded.exp
         req.user = decoded
         return validateRole(req, res, next)
     } catch ({ message, name }) {

@@ -27,10 +27,10 @@ app.use(passport.initialize())
 
 //Strategies Auth
 passport.use(useGoogleStrategy())
+passport.use(useFacebookStrategy())
 passport.serializeUser((user, done) => {
     done(null, user)
 })
-passport.use(useFacebookStrategy())
 
 //Routes
 auth(app)
