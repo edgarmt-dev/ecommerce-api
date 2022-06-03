@@ -17,7 +17,7 @@ class User {
             const result = await UserModel.findOne({ email: email })
             return result
         } catch (error) {
-            console.log(result);
+            return result
         }
     }
 
@@ -43,8 +43,6 @@ class User {
             }
         })
 
-        console.log();
-
         if (user) return { success: true, user }
 
         data.password = uuid.v4()
@@ -63,20 +61,26 @@ class User {
             }
         } catch (error) {
             if (error.code === 11000 && error.keyValue.email) {
-                const provider = 'provider.' + data.provider
-                const idProvider = 'idProvider.' + data.provider
-                user = await UserModel.findOneAndUpdate({
-                    email: error.keyValue.email
-                }, {
-                    [provider]: true,
-                    [idProvider]: data.id
-                }, { new: true, returnOriginal: false })
-                return {
-                    success: true,
-                    user
-                }
+                const result = await this.updateProviders(error.keyValue.email, data)
+                if (result.success) return result
             }
             return hasErrors(error)
+        }
+    }
+
+    async updateProviders(email, data) {
+        const provider = 'provider.' + data.provider
+        const idProvider = 'idProvider.' + data.provider
+        const user = await UserModel.findOneAndUpdate({
+            email: email
+        }, {
+            [provider]: true,
+            [idProvider]: data.id
+        }, { new: true, returnOriginal: false })
+
+        return {
+            success: true,
+            user
         }
     }
 }
