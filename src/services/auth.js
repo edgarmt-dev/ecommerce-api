@@ -49,6 +49,7 @@ class Auth {
         if (data && data.password) {
             data.password = await this.#encrypt(data.password)
         }
+        data.provider = { local: true }
         const result = await this.userService.create(data)
         if (!result.success) return result
         return this.#buildUserData(result)
@@ -56,13 +57,13 @@ class Auth {
 
     async authWithProvider(data) {
         const user = {
-            idProvider: data.id,
+            id: data.id,
             provider: data.provider,
             profilePic: data.photos[0].value,
             email: data.emails[0].value,
-            name: data.displayName
+            name: data.displayName,
         }
-        const result = await this.userService.getOrCreate(user)
+        const result = await this.userService.getOrCreateByProvider(user)
         if (result.success) {
             return this.#buildUserData(result)
         }
@@ -74,7 +75,9 @@ class Auth {
             id: user._id,
             name: user.name,
             email: user.email,
-            role: user.role
+            role: user.role,
+            provider: user.provider,
+            idProvider: user.idProvider
         }
         return this.#getToken(data)
     }

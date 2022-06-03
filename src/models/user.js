@@ -24,8 +24,15 @@ const userSchema = new Schema(
             type: Number,
             default: 1
         },
-        idProvider: String,
-        provider: String
+        idProvider: {
+            google: String,
+            facebook: String
+        },
+        provider: {
+            local: Boolean,
+            google: Boolean,
+            facebook: Boolean
+        }
     }
 )
 

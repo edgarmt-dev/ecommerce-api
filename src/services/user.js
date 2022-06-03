@@ -33,15 +33,51 @@ class User {
         }
     }
 
-    async getOrCreate(data) {
-        const user = await UserModel.findOne({
-            idProvider: data.idProvider,
-            provider: data.provider
+    async getOrCreateByProvider(data) {
+        let user = await UserModel.findOne({
+            idProvider: {
+                [data.provider]: data.id
+            },
+            provider: {
+                [data.provider]: true
+            }
         })
+
+        console.log();
+
         if (user) return { success: true, user }
 
         data.password = uuid.v4()
-        return await this.create(data)
+
+        const newData = {
+            ...data,
+            idProvider: { [data.provider]: data.id },
+            provider: { [data.provider]: true, }
+        }
+
+        try {
+            user = await UserModel.create(newData)
+            return {
+                success: true,
+                user
+            }
+        } catch (error) {
+            if (error.code === 11000 && error.keyValue.email) {
+                const provider = 'provider.' + data.provider
+                const idProvider = 'idProvider.' + data.provider
+                user = await UserModel.findOneAndUpdate({
+                    email: error.keyValue.email
+                }, {
+                    [provider]: true,
+                    [idProvider]: data.id
+                }, { new: true, returnOriginal: false })
+                return {
+                    success: true,
+                    user
+                }
+            }
+            return hasErrors(error)
+        }
     }
 }
 

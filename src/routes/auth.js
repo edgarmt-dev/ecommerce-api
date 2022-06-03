@@ -53,7 +53,7 @@ function auth(app) {
     }),
         async (req, res) => {
             const result = await authService.authWithProvider(req.user.profile)
-            if (result.success) return tokenToCookie(res, result.user)
+            if (result.success) return tokenToCookie(res, result)
             return res.json(result)
         })
 }
