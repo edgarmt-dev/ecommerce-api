@@ -43,15 +43,10 @@ class User {
             }
         }
         let user = await UserModel.findOne(providerData)
-
         if (user) return { success: true, user }
 
         data.password = uuid.v4()
-
-        const newData = {
-            ...data,
-            ...providerData
-        }
+        const newData = { ...data, ...providerData }
 
         try {
             user = await UserModel.create(newData)
@@ -78,7 +73,7 @@ class User {
             [idProvider]: data.id
         }, {
             new: true,
-            returnOriginal: false
+            returnOriginal: false 
         })
 
         return {

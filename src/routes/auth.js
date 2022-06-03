@@ -56,6 +56,16 @@ function auth(app) {
             if (result.success) return tokenToCookie(res, result)
             return res.json(result)
         })
+
+    router.get('/github', passport.authenticate('github', { scope: ['user:email'] }))
+
+    router.get('/github/callback', passport.authenticate('github', {
+        failureRedirect: '/',
+        session: false
+    }), (req, res) => {
+        console.log(req.user.profile);
+        return res.json({ success: true })
+    })
 }
 
 module.exports = auth

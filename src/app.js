@@ -4,7 +4,7 @@ const pkg = require('../package.json')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const passport = require('passport')
-const { useGoogleStrategy, useFacebookStrategy } = require('./middlewares/authProvider')
+const { useGoogleStrategy, useFacebookStrategy, useGitHubStrategy } = require('./middlewares/authProvider')
 const { jwtSecret } = require('./config')
 
 const app = express()
@@ -28,6 +28,7 @@ app.use(passport.initialize())
 //Strategies Auth
 passport.use(useGoogleStrategy())
 passport.use(useFacebookStrategy())
+passport.use(useGitHubStrategy())
 passport.serializeUser((user, done) => {
     done(null, user)
 })
