@@ -34,14 +34,15 @@ class User {
     }
 
     async getOrCreateByProvider(data) {
-        let user = await UserModel.findOne({
+        const providerData = {
             idProvider: {
                 [data.provider]: data.id
             },
             provider: {
                 [data.provider]: true
             }
-        })
+        }
+        let user = await UserModel.findOne(providerData)
 
         if (user) return { success: true, user }
 
@@ -49,8 +50,7 @@ class User {
 
         const newData = {
             ...data,
-            idProvider: { [data.provider]: data.id },
-            provider: { [data.provider]: true, }
+            ...providerData
         }
 
         try {
@@ -76,7 +76,10 @@ class User {
         }, {
             [provider]: true,
             [idProvider]: data.id
-        }, { new: true, returnOriginal: false })
+        }, {
+            new: true,
+            returnOriginal: false
+        })
 
         return {
             success: true,
