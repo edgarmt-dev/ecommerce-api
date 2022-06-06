@@ -8,21 +8,21 @@ const { oAuthClientID,
     ghClientSecret,
     production,
 } = require('../config')
-
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const FBStrategy = require('passport-facebook').Strategy
 const GHStrategy = require('passport-github2').Strategy
 
 const asignCallbackURL = (provider) => `${production ? callbackURL : calllbackURLDev}/api/auth/${provider}/callback`
+const getProfile = (accessToken, refreshToken, profile, done) => {
+    done(null, { profile })
+}
 
 const useGoogleStrategy = () => {
     return new GoogleStrategy({
         clientID: oAuthClientID,
         clientSecret: oAuhtClientSecret,
         callbackURL: asignCallbackURL('google'),
-    }, (accessToken, refreshToken, profile, done) => {
-        done(null, { profile })
-    })
+    }, getProfile)
 }
 
 const useFacebookStrategy = () => {
@@ -31,9 +31,7 @@ const useFacebookStrategy = () => {
         clientSecret: fbAppSecret,
         callbackURL: asignCallbackURL('facebook'),
         profileFields: ['id', 'displayName', 'photos', 'emails']
-    }, (accessToken, refreshToken, profile, done) => {
-        done(null, { profile })
-    })
+    }, getProfile)
 }
 
 const useGitHubStrategy = () => {
@@ -42,9 +40,7 @@ const useGitHubStrategy = () => {
         clientSecret: ghClientSecret,
         callbackURL: asignCallbackURL('github'),
         profileFields: ['email']
-    }, (accessToken, refreshToken, profile, done) => {
-        done(null, { profile })
-    })
+    }, getProfile)
 }
 
 module.exports = {
