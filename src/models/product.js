@@ -8,7 +8,7 @@ const productsSchema = new Schema(
         },
         description: String,
         imgURL: {
-            type: String,
+            type: [String],
             required: [true, 'Image required']
         },
         price: {
@@ -19,9 +19,9 @@ const productsSchema = new Schema(
             type: Array,
             default: []
         },
-        quantity: {
-            type:Number,
-            default:1
+        amount: {
+            type: Number,
+            default: 1
         }
     }
 )
