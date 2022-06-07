@@ -26,12 +26,14 @@ const userSchema = new Schema(
         },
         idProvider: {
             google: String,
-            facebook: String
+            facebook: String,
+            github: String
         },
         provider: {
             local: Boolean,
             google: Boolean,
-            facebook: Boolean
+            facebook: Boolean,
+            github: Boolean
         }
     }
 )

@@ -62,9 +62,10 @@ function auth(app) {
     router.get('/github/callback', passport.authenticate('github', {
         failureRedirect: '/',
         session: false
-    }), (req, res) => {
-        console.log(req.user.profile);
-        return res.json({ success: true })
+    }), async (req, res) => {
+        const result = await authService.authWithProvider(req.user.profile)
+        if (result.success) return tokenToCookie(res, result)
+        return res.json(result)
     })
 }
 

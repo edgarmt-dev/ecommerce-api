@@ -73,7 +73,6 @@ class User {
             [idProvider]: data.id
         }, {
             new: true,
-            returnOriginal: false 
         })
 
         return {

@@ -39,7 +39,7 @@ const useGitHubStrategy = () => {
         clientID: ghClientID,
         clientSecret: ghClientSecret,
         callbackURL: asignCallbackURL('github'),
-        profileFields: ['email']
+        scope:['user:email']
     }, getProfile)
 }
 
