@@ -1,8 +1,13 @@
 const hasErrors = require("../helpers/errors/hasErrors");
 const UserModel = require("../models/user");
+const Cart = require('../services/cart')
 const uuid = require('uuid')
 
 class User {
+
+    constructor() {
+        this.cartService = new Cart()
+    }
 
     async getAll() {
         try {
@@ -24,6 +29,7 @@ class User {
     async create(data) {
         try {
             const user = await UserModel.create(data)
+            await this.cartService.create(user._id)
             return {
                 success: true,
                 user
@@ -50,12 +56,15 @@ class User {
 
         try {
             user = await UserModel.create(newData)
+            await this.cartService.create(user._id)
             return {
                 success: true,
                 user
             }
         } catch (error) {
-            if (error.code === 11000 && error.keyValue.email) {
+            if (error.code === 11000 &&
+                error.keyValue.email
+            ) {
                 const result = await this.updateProviders(error.keyValue.email, data)
                 if (result.success) return result
             }

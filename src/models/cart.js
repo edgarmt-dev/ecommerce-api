@@ -2,7 +2,6 @@ const { mongoose: { Schema, model } } = require('../config/db')
 
 const cartSchema = new Schema(
     {
-        
         idUser: {
             ref: 'User',
             type: Schema.Types.ObjectId

@@ -1,7 +1,12 @@
 const hasErrors = require('../helpers/errors/hasErrors')
 const ProductModel = require('../models/product')
+const Cart = require('./cart')
 
 class Product {
+
+    constructor () {
+        this.cartService = new Cart()
+    }
 
     async getAll() {
         try {

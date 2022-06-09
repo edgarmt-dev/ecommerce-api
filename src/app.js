@@ -14,6 +14,7 @@ app.set('pkg', pkg)
 const auth = require('./routes/auth')
 const user = require('./routes/user')
 const product = require('./routes/product')
+const cart = require('./routes/cart')
 
 //Middlewares
 app.use(morgan('dev'))
@@ -37,6 +38,7 @@ passport.serializeUser((user, done) => {
 auth(app)
 user(app)
 product(app)
+cart(app)
 
 app.get('/', (req, res) => {
     const data = {
