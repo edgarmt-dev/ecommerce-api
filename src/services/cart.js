@@ -13,7 +13,7 @@ class Cart {
 
     async getItems(idUser) {
         try {
-            const items = await CartModel.findById(idUser)
+            const items = await CartModel.findOne({ idUser: idUser }).populate('items._id')
             return items
         } catch (error) {
 
@@ -22,31 +22,22 @@ class Cart {
 
     async addToCart(idUser, idProduct, amount) {
         try {
-            const result = await CartModel.findByIdAndUpdate(idUser, {
+            const result = await CartModel.findOneAndUpdate({ idUser: idUser }, {
                 $push: {
                     items: {
-                        product: idProduct,
+                        _id: idProduct,
                         amount
                     }
                 }
-            }, { new: true })
+            }, { new: true }).populate('items._id')
 
-            return result
+            return { succes: true, result }
         } catch (error) {
             console.log(error);
         }
     }
 
-    async removeFromCart(idUser, idProduct) {
-        try {
-            const items = await CartModel.findById(idUser)
-            return items
-        } catch (error) {
-
-        }
-    }
-
-    async addToCart(idUser, idProduct, amount) {
+    async removeFromCart(idUser, idProduct, amount) {
         try {
             const result = await CartModel.findByIdAndUpdate(idUser, {
                 $pull: {
