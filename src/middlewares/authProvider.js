@@ -12,7 +12,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy
 const FBStrategy = require('passport-facebook').Strategy
 const GHStrategy = require('passport-github2').Strategy
 
-const asignCallbackURL = (provider) => `${production ? callbackURL : calllbackURLDev}/api/auth/${provider}/callback`
+const asignCallbackURL = provider => `${production ? callbackURL : calllbackURLDev}/api/auth/${provider}/callback`
 const getProfile = (accessToken, refreshToken, profile, done) => {
     done(null, { profile })
 }

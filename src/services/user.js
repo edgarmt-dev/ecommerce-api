@@ -64,13 +64,11 @@ class User {
     }
 
     async updateProviders(email, data) {
-        const provider = 'provider.' + data.provider
-        const idProvider = 'idProvider.' + data.provider
         const user = await UserModel.findOneAndUpdate({
             email: email
         }, {
-            [provider]: true,
-            [idProvider]: data.id
+            [`provider.${data.provider}`]: true,
+            [`idProvider.${data.provider}`]: data.id
         }, {
             new: true,
         })
