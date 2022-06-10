@@ -17,7 +17,7 @@ function product(app) {
         return res.json(product)
     })
 
-    router.post('/', authValidation(10), async (req, res) => {
+    router.post('/', authValidation(1), async (req, res) => {
         const result = await productService.createProduct(req.body)
         return res.status(result.code ? result.code : 200).json(result)
     })

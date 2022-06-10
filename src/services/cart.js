@@ -4,7 +4,10 @@ class Cart {
 
     async create(idUser) {
         try {
-            const cart = await CartModel.create({ idUser, items: [] })
+            const cart = await CartModel.create({
+                idUser,
+                items: []
+            })
             return cart
         } catch (error) {
 
@@ -13,7 +16,9 @@ class Cart {
 
     async getItems(idUser) {
         try {
-            const items = await CartModel.findOne({ idUser: idUser }).populate('items._id')
+            const items = await CartModel.findOne({
+                idUser: idUser
+            }).populate('items._id')
             return items
         } catch (error) {
 
@@ -22,30 +27,37 @@ class Cart {
 
     async addToCart(idUser, idProduct, amount) {
         try {
-            const result = await CartModel.findOneAndUpdate({ idUser: idUser }, {
+            const result = await CartModel.findOneAndUpdate({
+                idUser: idUser
+            }, {
                 $push: {
                     items: {
-                        _id: idProduct,
+                        product: idProduct,
                         amount
                     }
                 }
-            }, { new: true }).populate('items._id')
+            }, { new: true }).populate('items.product')
 
-            return { succes: true, result }
+            return { success: true, result }
         } catch (error) {
             console.log(error);
         }
     }
 
-    async removeFromCart(idUser, idProduct, amount) {
+    async removeFromCart(idUser, idProduct) {
         try {
-            const result = await CartModel.findByIdAndUpdate(idUser, {
+            const result = await CartModel.findOneAndUpdate({
+                idUser: idUser
+            }, {
                 $pull: {
                     items: { product: idProduct, }
                 }
-            }, { new: true })
+            }, { new: true }).populate('items.product')
 
-            return result
+            return {
+                success: true,
+                result
+            }
         } catch (error) {
             console.log(error);
         }

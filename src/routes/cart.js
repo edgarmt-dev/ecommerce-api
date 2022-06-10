@@ -15,7 +15,17 @@ function cart(app) {
     router.post('/add-item', authValidation(1), async (req, res) => {
         const { idProduct, amount } = req.body
         const result = await cartService.addToCart(req.user.id, idProduct, amount)
-        return res.json(result)
+        return res
+            .status(result.success ? 200 : 400)
+            .json(result)
+    })
+
+    router.delete('/remove-item', authValidation(1), async (req, res) => {
+        const { idProduct } = req.body
+        const result = await cartService.removeFromCart(req.user.id, idProduct)
+        return res
+            .status(result.success ? 200 : 400)
+            .json(result)
     })
 
 }
