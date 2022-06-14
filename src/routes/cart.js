@@ -28,6 +28,13 @@ function cart(app) {
             .json(result)
     })
 
+    router.get('/pay', authValidation(1), async(req, res) => {
+        console.log(req.user.id);
+        const result = await cartService.pay(req.user.id)
+        console.log(result);
+        return res.json(result)
+    })
+
 }
 
 module.exports = cart

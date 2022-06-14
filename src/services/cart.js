@@ -1,6 +1,11 @@
 const CartModel = require("../models/cart");
+const Payment = require("./payment");
 
 class Cart {
+
+    constructor() {
+        this.paymentService = new Payment()
+    }
 
     async create(idUser) {
         try {
@@ -18,7 +23,7 @@ class Cart {
         try {
             const items = await CartModel.findOne({
                 idUser: idUser
-            }).populate('items._id')
+            }).populate('items.product')
             return items
         } catch (error) {
 
@@ -50,19 +55,32 @@ class Cart {
                 idUser: idUser
             }, {
                 $pull: {
-                    items: { product: idProduct, }
+                    items: {
+                        product: idProduct,
+                    }
                 }
             }, { new: true }).populate('items.product')
 
-            return {
-                success: true,
-                result
-            }
+            return { success: true, result }
         } catch (error) {
             console.log(error);
         }
     }
 
+    async pay(idUser) {
+        try {
+            const { items } = await this.getItems(idUser)
+            console.log(items)
+            const total = items.reduce((result, item) => {
+                return result + (item.product.price * item.amount)
+            }, 0)
+            const clientSecret = await this.paymentService.createIntent(total*100)
+            console.log(clientSecret);
+            return { success: true, clientSecret }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = Cart

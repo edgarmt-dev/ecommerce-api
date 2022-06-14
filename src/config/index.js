@@ -9,6 +9,8 @@ const config = {
     dbHost: process.env.DB_HOST,
     dbName: process.env.DB_NAME,
     jwtSecret: process.env.JWT_SECRET,
+    stripePK: process.env.STRIPE_PK,
+    stripeSK: process.env.STRIPE_SK,
     oAuthClientID: process.env.OAUTH_CLIENT_ID,
     oAuhtClientSecret: process.env.OAUTH_CLIENT_SECRET,
     ghClientID: process.env.GITHUB_CLIENT_ID,

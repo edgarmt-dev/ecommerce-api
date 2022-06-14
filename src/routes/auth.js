@@ -20,6 +20,7 @@ function auth(app) {
     })
 
     router.get('/validate', authValidation(1), (req, res) => {
+        console.log(req.user);
         return res.json({
             success: true,
             user: req.user

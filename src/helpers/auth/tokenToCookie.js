@@ -5,10 +5,10 @@ function tokenToCookie(res, result, statusCode) {
         const { token, ...data } = result
         return res.cookie("token", token, {
             httpOnly: true,
-            secure: production,
+            secure: true,
             sameSite: "none",
             expires: new Date(new Date().setDate(new Date().getDate() + 7))
-        }).json(data)
+        }).redirect('http://127.0.0.1:5500')
     }
     return res.status(statusCode).json(result)
 }
@@ -18,7 +18,7 @@ function deleteCookie(res) {
         expires: new Date(),
         httpOnly: true,
         sameSite: "none",
-        secure: production
+        secure: true
     }).json({
         success: true,
         message: "Successfully logged out"

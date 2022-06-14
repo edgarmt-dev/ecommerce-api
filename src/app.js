@@ -4,7 +4,11 @@ const pkg = require('../package.json')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const passport = require('passport')
-const { useGoogleStrategy, useFacebookStrategy, useGitHubStrategy } = require('./middlewares/authProvider')
+const {
+    useGoogleStrategy,
+    useFacebookStrategy,
+    useGitHubStrategy,
+} = require('./middlewares/authProvider')
 const { jwtSecret } = require('./config')
 
 const app = express()
@@ -13,22 +17,22 @@ app.set('pkg', pkg)
 //Routes import
 const auth = require('./routes/auth')
 const user = require('./routes/user')
-const product = require('./routes/product')
 const cart = require('./routes/cart')
+const product = require('./routes/product')
 
 //Middlewares
-app.use(morgan('dev'))
 app.use(express.json())
-app.use(cookieParser(jwtSecret))
+app.use(morgan('dev'))
 app.use(cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'http://127.0.0.1:5500'],
     credentials: true
 }))
+app.use(cookieParser(jwtSecret))
 app.use(passport.initialize())
 
 //Strategies Auth
-passport.use(useGoogleStrategy())
 passport.use(useFacebookStrategy())
+passport.use(useGoogleStrategy())
 passport.use(useGitHubStrategy())
 passport.serializeUser((user, done) => {
     done(null, user)
@@ -37,8 +41,8 @@ passport.serializeUser((user, done) => {
 //Routes
 auth(app)
 user(app)
-product(app)
 cart(app)
+product(app)
 
 app.get('/', (req, res) => {
     const data = {

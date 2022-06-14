@@ -1,6 +1,8 @@
+const { stripeSK } = require('../config')
 const hasErrors = require('../helpers/errors/hasErrors')
 const ProductModel = require('../models/product')
 const Cart = require('./cart')
+const stripe = require('stripe')(stripeSK)
 
 class Product {
 

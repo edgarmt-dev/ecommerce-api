@@ -49,6 +49,7 @@ class User {
             }
         }
         let user = await UserModel.findOne(providerData)
+        
         if (user) return { success: true, user }
 
         data.password = uuid.v4()
