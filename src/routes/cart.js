@@ -28,10 +28,15 @@ function cart(app) {
             .json(result)
     })
 
+    router.put('/clear-out-cart', authValidation(1), async(req, res) => {
+        const { id } = req.user
+
+        const result = await cartService.clearOut(id)
+        return res.json(result)
+    })
+
     router.get('/pay', authValidation(1), async(req, res) => {
-        console.log(req.user.id);
         const result = await cartService.pay(req.user.id)
-        console.log(result);
         return res.json(result)
     })
 

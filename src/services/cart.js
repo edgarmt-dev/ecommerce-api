@@ -118,6 +118,20 @@ class Cart {
             console.log(error);
         }
     }
+
+    async clearOut(idUser) {
+        try {
+            const cart = await CartModel.findOneAndUpdate({
+                idUser: idUser
+            }, {
+                $pullAll: { items: [] }
+            })
+
+            return { success: true, cart }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = Cart
