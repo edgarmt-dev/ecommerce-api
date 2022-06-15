@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { tokenToCookie, deleteCookie } = require("../helpers/auth/tokenToCookie");
+const { tokenToCookie, deleteCookie, tokenToCookieLocal } = require("../helpers/auth/tokenToCookie");
 const Auth = require("../services/auth");
 const passport = require('passport');
 const authValidation = require("../middlewares/auth");
@@ -11,16 +11,15 @@ function auth(app) {
 
     router.post('/login', async (req, res) => {
         const result = await authService.logIn(req.body)
-        return tokenToCookie(res, result, 401)
+        return tokenToCookieLocal(res, result, 401)
     })
 
     router.post('/register', async (req, res) => {
         const result = await authService.register(req.body)
-        return tokenToCookie(res, result, 401)
+        return tokenToCookieLocal(res, result, 401)
     })
 
     router.get('/validate', authValidation(1), (req, res) => {
-        console.log(req.user);
         return res.json({
             success: true,
             user: req.user

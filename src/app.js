@@ -47,7 +47,9 @@ product(app)
 app.get('/', (req, res) => {
     const data = {
         name: app.get('pkg').name,
-        version: app.get('pkg').version
+        version: app.get('pkg').version,
+        description: app.get('pkg').description,
+        author: app.get('pkg').author 
     }
     return res.json(data)
 })

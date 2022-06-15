@@ -30,8 +30,26 @@ class Cart {
         }
     }
 
+    async getOne(idUser, idProduct) {
+        try {
+            const product = await CartModel.findOne({
+                idUser: idUser,
+                ['items.product']: idProduct
+            })
+            if (product) return { exists: true, product: product.items }
+            return { exists: false }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     async addToCart(idUser, idProduct, amount) {
         try {
+            const productExists = await this.getOne(idUser, idProduct)
+            if (productExists.exists) {
+                const result = await this.increaseAmount(idUser, idProduct, amount)
+                return { success: true, result }
+            }
             const result = await CartModel.findOneAndUpdate({
                 idUser: idUser
             }, {
@@ -44,6 +62,24 @@ class Cart {
             }, { new: true }).populate('items.product')
 
             return { success: true, result }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async increaseAmount(idUser, idProduct, amount) {
+        try {
+            const { product } = await this.getOne(idUser, idProduct)
+            const newAmount = product[0].amount + amount
+
+            const result = await CartModel.findOneAndUpdate({
+                idUser: idUser,
+                ['items.product']: idProduct
+            }, {
+                items: [...product.items, { product: idProduct, amount: !amount ? product[0].amount + 1 : newAmount }]
+            }, { new: true }).populate('items.product')
+
+            return result
         } catch (error) {
             console.log(error);
         }
@@ -70,13 +106,14 @@ class Cart {
     async pay(idUser) {
         try {
             const { items } = await this.getItems(idUser)
-            console.log(items)
             const total = items.reduce((result, item) => {
                 return result + (item.product.price * item.amount)
             }, 0)
-            const clientSecret = await this.paymentService.createIntent(total*100)
-            console.log(clientSecret);
-            return { success: true, clientSecret }
+            const clientSecret = await this.paymentService.createIntent(total * 100)
+            return {
+                success: true,
+                clientSecret
+            }
         } catch (error) {
             console.log(error);
         }
