@@ -5,7 +5,7 @@ function tokenToCookie(res, result, statusCode) {
         const { token, ...data } = result
         return res.cookie("token", token, {
             httpOnly: true,
-            secure: production,
+            secure: true,
             sameSite: "none",
             expires: new Date(new Date().setDate(new Date().getDate() + 7))
         }).redirect('http://localhost:3000')
@@ -18,7 +18,7 @@ function tokenToCookieLocal(res, result, statusCode){
         const { token, ...data } = result
         return res.cookie("token", token, {
             httpOnly: true,
-            secure: production,
+            secure: true,
             sameSite: "none",
             expires: new Date(new Date().setDate(new Date().getDate() + 7))
         }).json(result.user)
@@ -29,7 +29,7 @@ function tokenToCookieLocal(res, result, statusCode){
 function deleteCookie(res) {
     res.cookie('token', '', {
         expires: new Date(),
-        httpOnly: production,
+        httpOnly: true,
         sameSite: "none",
         secure: true
     }).json({

@@ -1,7 +1,9 @@
 const hasErrors = require("../helpers/errors/hasErrors");
 const UserModel = require("../models/user");
+const { stripeSK } = require("../config");
+const stripe = require('stripe')(stripeSK)
 const Cart = require('../services/cart')
-const uuid = require('uuid')
+const uuid = require('uuid');
 
 class User {
 
@@ -27,14 +29,21 @@ class User {
     }
 
     async create(data) {
+        let stripeCustomerID
         try {
-            const user = await UserModel.create(data)
+            const customer = await stripe.customers.create({
+                name: data.name,
+                email: data.email
+            })
+            stripeCustomerID = customer.id
+            const user = await UserModel.create({ ...data, stripeCustomerID })
             await this.cartService.create(user._id)
             return {
                 success: true,
                 user
             }
         } catch (error) {
+            const customer = await stripe.customers.del(stripeCustomerID)
             return hasErrors(error)
         }
     }
@@ -49,20 +58,29 @@ class User {
             }
         }
         let user = await UserModel.findOne(providerData)
-        
+
         if (user) return { success: true, user }
 
         data.password = uuid.v4()
         const newData = { ...data, ...providerData }
-
+        let stripeCustomerID
         try {
-            user = await UserModel.create(newData)
+            const customer = await stripe.customers.create({
+                name: data.name,
+                email: data.email
+            })
+            stripeCustomerID = customer.id
+            user = await UserModel.create({
+                ...newData,
+                stripeCustomerID
+            })
             await this.cartService.create(user._id)
             return {
                 success: true,
                 user
             }
         } catch (error) {
+            const customer = await stripe.customers.del(stripeCustomerID)
             if (error.code === 11000 &&
                 error.keyValue.email
             ) {

@@ -36,7 +36,7 @@ function cart(app) {
     })
 
     router.get('/pay', authValidation(1), async(req, res) => {
-        const result = await cartService.pay(req.user.id)
+        const result = await cartService.pay(req.user.id, req.user.stripeCustomerID)
         return res.json(result)
     })
 

@@ -36,7 +36,7 @@ class Cart {
                 idUser: idUser,
                 ['items.product']: idProduct
             })
-            if (product) return { exists: true, product: product.items }
+            if (product) return { exists: true, product: product }
             return { exists: false }
         } catch (error) {
             console.log(error)
@@ -45,9 +45,9 @@ class Cart {
 
     async addToCart(idUser, idProduct, amount) {
         try {
-            const productExists = await this.getOne(idUser, idProduct)
-            if (productExists.exists) {
-                const result = await this.increaseAmount(idUser, idProduct, amount)
+            const { exists, product } = await this.getOne(idUser, idProduct)
+            if (exists) {
+                const result = await this.increaseAmount(idUser, idProduct, amount, product)
                 return { success: true, result }
             }
             const result = await CartModel.findOneAndUpdate({
@@ -67,16 +67,15 @@ class Cart {
         }
     }
 
-    async increaseAmount(idUser, idProduct, amount) {
+    async increaseAmount(idUser, idProduct, amount, product) {
         try {
-            const { product } = await this.getOne(idUser, idProduct)
             const newAmount = product[0].amount + amount
 
             const result = await CartModel.findOneAndUpdate({
                 idUser: idUser,
                 ['items.product']: idProduct
             }, {
-                items: [...product.items, { product: idProduct, amount: !amount ? product[0].amount + 1 : newAmount }]
+                items: [{ $push: { product: idProduct, amount: !amount ? product[0].amount + 1 : newAmount } }]
             }, { new: true }).populate('items.product')
 
             return result
@@ -103,16 +102,23 @@ class Cart {
         }
     }
 
-    async pay(idUser) {
+    async pay(idUser, stripeCustomerID) {
         try {
             const { items } = await this.getItems(idUser)
             const total = items.reduce((result, item) => {
                 return result + (item.product.price * item.amount)
-            }, 0)
-            const clientSecret = await this.paymentService.createIntent(total * 100)
+            }, 0) * 100
+
+            if (total > 0) {
+                const clientSecret = await this.paymentService.createIntent(total, idUser, stripeCustomerID)
+                return {
+                    success: true,
+                    clientSecret
+                }
+            }
             return {
-                success: true,
-                clientSecret
+                success: false,
+                message: 'Value invalid'
             }
         } catch (error) {
             console.log(error);

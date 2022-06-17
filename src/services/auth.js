@@ -77,7 +77,8 @@ class Auth {
             email: user.email,
             role: user.role,
             provider: user.provider,
-            idProvider: user.idProvider
+            idProvider: user.idProvider,
+            stripeCustomerID: user.stripeCustomerID
         }
         return this.#getToken(data)
     }

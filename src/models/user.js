@@ -24,6 +24,7 @@ const userSchema = new Schema(
             type: Number,
             default: 1
         },
+        stripeCustomerID: String,
         idProvider: {
             google: String,
             facebook: String,
