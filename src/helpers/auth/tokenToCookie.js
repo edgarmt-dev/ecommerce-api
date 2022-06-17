@@ -1,6 +1,5 @@
 const { production } = require("../../config")
 
-console.log(production);
 function tokenToCookie(res, result, statusCode) {
     if (result.success) {
         const { token, ...data } = result

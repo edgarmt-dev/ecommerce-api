@@ -19,10 +19,12 @@ const auth = require('./routes/auth')
 const user = require('./routes/user')
 const cart = require('./routes/cart')
 const product = require('./routes/product')
+const webhooks = require('./routes/webhooks')
 
 //Middlewares
-app.use(express.json())
 app.use(morgan('dev'))
+app.use('/api/webhooks/stripe', express.raw({ type: 'application/json' }))
+app.use(express.json())
 app.use(cors({
     origin: ['http://localhost:3000', 'http://127.0.0.1:5500'],
     credentials: true
@@ -43,13 +45,14 @@ auth(app)
 user(app)
 cart(app)
 product(app)
+webhooks(app)
 
 app.get('/', (req, res) => {
     const data = {
         name: app.get('pkg').name,
         version: app.get('pkg').version,
         description: app.get('pkg').description,
-        author: app.get('pkg').author 
+        author: app.get('pkg').author
     }
     return res.json(data)
 })
