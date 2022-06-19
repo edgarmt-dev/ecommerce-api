@@ -6,6 +6,7 @@
 
 ## Documentation
 
+[View the documentation](https://documenter.getpostman.com/view/19249443/UzBmMSSk)
 
 ## Getting Started
 

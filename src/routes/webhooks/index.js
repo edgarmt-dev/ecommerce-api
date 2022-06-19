@@ -11,8 +11,6 @@ function webhooks(app) {
         const sig = req.headers['stripe-signature']
         const result = await paymentService.confirm(req.body, sig)
 
-        console.log(result);
-
         return res.status(result.success ? 200 : 400).json(result)
     })
 }
