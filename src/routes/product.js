@@ -7,9 +7,19 @@ function product(app) {
     app.use('/api/products', router)
     const productService = new Product()
 
+
     router.get('/', async (req, res) => {
         const products = await productService.getAll()
         return res.json(products)
+    })
+
+    router.get('/category', (req, res) => {
+        const name = req.query.name
+        const isAuthor = req.query.isAuthor
+
+        return res.json({
+            name, isAuthor
+        })
     })
 
     router.get('/:id', async (req, res) => {
@@ -19,6 +29,11 @@ function product(app) {
 
     router.post('/', authValidation(1), async (req, res) => {
         const result = await productService.createProduct(req.body)
+        return res.status(result.code ? result.code : 200).json(result)
+    })
+
+    router.get('/pay/:idProduct', authValidation(1), async (req, res) => {
+        const result = await productService.pay(req.user.id,  req.user.stripeCustomerID, req.params.idProduct)
         return res.status(result.code ? result.code : 200).json(result)
     })
 }

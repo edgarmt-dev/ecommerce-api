@@ -16,8 +16,9 @@ const productsSchema = new Schema(
             required: [true, 'Price required']
         },
         categories: {
-            type: Array,
-            default: []
+            type: String,
+            enum: ['Audio', 'Computation', 'Electronic', 'Security', 'Tools', 'Cables', 'Phones', 'Global'],
+            default: 'Global'
         },
         amount: {
             type: Number,

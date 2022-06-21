@@ -18,7 +18,7 @@ function tokenToCookieLocal(res, result, statusCode){
         const { token, ...data } = result
         return res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
+            secure: production,
             sameSite: "none",
             expires: new Date(new Date().setDate(new Date().getDate() + 7))
         }).json(result.user)
@@ -31,7 +31,7 @@ function deleteCookie(res) {
         expires: new Date(),
         httpOnly: true,
         sameSite: "none",
-        secure: true
+        secure: production
     }).json({
         success: true,
         message: "Successfully logged out"

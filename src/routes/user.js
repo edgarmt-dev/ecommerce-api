@@ -11,8 +11,6 @@ function user(app) {
         const result = await userService.getAll()
         return res.json(result)
     })
-
-
 }
 
 module.exports = user
