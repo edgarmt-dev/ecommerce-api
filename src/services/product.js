@@ -12,12 +12,35 @@ class Product {
         this.paymentService = new Payment()
     }
 
-    async getAll() {
+    async getAll(limit = 20, page = 1) {
         try {
-            const products = await ProductModel.find()
-            return { success: true, products }
+            const total = await ProductModel.count()
+            const totalPages = Math.ceil(total / limit)
+
+            if (page > totalPages || page === 0) return {
+                success: false,
+                message: 'Page not found'
+            }
+
+            const skip = (page - 1) * limit
+            const products = await ProductModel.find().skip(skip).limit(limit)
+
+            const nextPage = `/api/products?${(page + 1)}`
+            const prevPage = `/api/products?${(page - 1)}`
+
+            return {
+                success: true,
+                products,
+                totalProducts: total,
+                totalPages,
+                prevPage,
+                nextPage
+            }
         } catch (error) {
-            return { success: false, error }
+            return {
+                success: false,
+                error
+            }
         }
     }
 
@@ -51,12 +74,18 @@ class Product {
             const price = product.price
 
             if (price > 0) {
-                const clientSecret = await this.paymentService.createIntent(price, idUser, stripeCustomerID)
+                const clientSecret = await this.paymentService.createIntent(
+                    price,
+                    idUser,
+                    stripeCustomerID
+                )
                 return {
                     success: true,
                     clientSecret
                 }
             }
+
+            return { success: false }
         } catch (error) {
 
         }

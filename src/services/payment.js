@@ -14,34 +14,36 @@ class Payment {
         return intent.client_secret
     }
 
-    // async confirmOne(data, signature) {
-    //     let event
-    //     try {
-    //         event = stripe.webhooks.constructEvent(data, signature, endpointSecret)
-    //     } catch (error) {
-    //         return {
-    //             success: false,
-    //             message: `Webhook Error: ${error.message}`
-    //         }
-    //     }
+    async confirmOne(data, signature) {
+        let event
+        try {
+            event = stripe.webhooks.constructEvent(data, signature, endpointSecret)
+        } catch (error) {
+            return {
+                success: false,
+                message: `Webhook Error: ${error.message}`
+            }
+        }
 
-    //     switch (event.type) {
-    //         case 'payment_intent.succeeded':
-    //             const paymentIntent = event.data.object
-    //             const stripeCustomerID = paymentIntent.customer
+        switch (event.type) {
+            case 'payment_intent.succeeded':
+                const paymentIntent = event.data.object
+                const stripeCustomerID = paymentIntent.customer
+
+                console.log('Listo')
     
-    //             // Then define and call a function to handle the event payment_intent.succeeded
-    //             break
-    //         // ... handle other event types
-    //         default:
-    //             console.log(`Unhandled event type ${event.type}`)
-    //     }
+                // Then define and call a function to handle the event payment_intent.succeeded
+                break
+            // ... handle other event types
+            default:
+                console.log(`Unhandled event type ${event.type}`)
+        }
 
-    //     return {
-    //         success: true,
-    //         message: 'OK'
-    //     }
-    // }
+        return {
+            success: true,
+            message: 'OK'
+        }
+    }
 
     async confirm(data, signature) {
         let event
@@ -60,6 +62,7 @@ class Payment {
                 const stripeCustomerID = paymentIntent.customer
 
                 const user = await UserModel.findOneAndUpdate({ stripeCustomerID })
+                console.log(user);
 
                 await CartModel.findOneAndUpdate({ 
                     idUser: user.id 

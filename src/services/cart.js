@@ -69,14 +69,19 @@ class Cart {
 
     async increaseAmount(idUser, idProduct, amount, product) {
         try {
-            const newAmount = product[0].amount + amount
+            const newAmount = product.items[0].amount + amount
 
             const result = await CartModel.findOneAndUpdate({
                 idUser: idUser,
                 ['items.product']: idProduct
             }, {
-                items: [{ $push: { product: idProduct, amount: !amount ? product[0].amount + 1 : newAmount } }]
-            }, { new: true }).populate('items.product')
+                items: [{
+                    product: idProduct,
+                    amount: !amount ? product.items[0].amount + 1 : newAmount
+                }]
+            }, {
+                new: true
+            }).populate('items.product')
 
             return result
         } catch (error) {

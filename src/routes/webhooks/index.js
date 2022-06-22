@@ -13,6 +13,12 @@ function webhooks(app) {
 
         return res.status(result.success ? 200 : 400).json(result)
     })
+
+    router.post('/stripe/one', async (req, res) => {
+        const result = await paymentService.confirmOne(req.body, sig)
+
+        return res.status(result.success ? 200 : 400).json(result)
+    })
 }
 
 module.exports = webhooks

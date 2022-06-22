@@ -9,7 +9,9 @@ function product(app) {
 
 
     router.get('/', async (req, res) => {
-        const products = await productService.getAll()
+        const { page, limit } = req.query
+        const numberPage = parseInt(page) 
+        const products = await productService.getAll(numberPage, limit)
         return res.json(products)
     })
 
@@ -29,12 +31,22 @@ function product(app) {
 
     router.post('/', authValidation(1), async (req, res) => {
         const result = await productService.createProduct(req.body)
-        return res.status(result.code ? result.code : 200).json(result)
+        return res.status(result.code ?
+            result.code :
+            200
+        ).json(result)
     })
 
     router.get('/pay/:idProduct', authValidation(1), async (req, res) => {
-        const result = await productService.pay(req.user.id,  req.user.stripeCustomerID, req.params.idProduct)
-        return res.status(result.code ? result.code : 200).json(result)
+        const result = await productService.pay(
+            req.user.id,
+            req.user.stripeCustomerID,
+            req.params.idProduct
+        )
+        return res.status(result.code ?
+            result.code :
+            200
+        ).json(result)
     })
 }
 
