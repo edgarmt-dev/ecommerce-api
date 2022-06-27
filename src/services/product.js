@@ -1,5 +1,6 @@
 const { stripeSK } = require('../config')
 const hasErrors = require('../helpers/errors/hasErrors')
+const pagination = require('../libs/pagination')
 const ProductModel = require('../models/product')
 const Cart = require('./cart')
 const Payment = require('./payment')
@@ -14,28 +15,7 @@ class Product {
 
     async getAll(limit = 20, page = 1) {
         try {
-            const total = await ProductModel.count()
-            const totalPages = Math.ceil(total / limit)
-
-            if (page > totalPages || page === 0) return {
-                success: false,
-                message: 'Page not found'
-            }
-
-            const skip = (page - 1) * limit
-            const products = await ProductModel.find().skip(skip).limit(limit)
-
-            const nextPage = totalPages < 2 ? null : `/api/products?${(page + 1)}`
-            const prevPage = page - 1 != 0 ? `/api/products?${(page - 1)}` : null
-
-            return {
-                success: true,
-                products,
-                totalProducts: total,
-                totalPages,
-                prevPage,
-                nextPage
-            }
+           return await pagination(limit, page, ProductModel)
         } catch (error) {
             return {
                 success: false,
