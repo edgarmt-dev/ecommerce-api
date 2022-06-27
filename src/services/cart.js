@@ -30,14 +30,18 @@ class Cart {
         }
     }
 
-    async getOne(idUser, idProduct) {
+    async getOneCart(idUser) {
+        const { items } = await CartModel.findOne({
+            idUser: idUser,
+        }).populate('items.product')
+
+        return items
+    }
+
+    async getOneProductInOneCart(idUser, idProduct) {
         try {
-            const { items } = await CartModel.findOne({
-                idUser: idUser,
-            }).populate('items.product')
-
+            const items = await this.getOneCart(idUser)
             const product = items.filter(item => item.product.id === idProduct)
-
             if (product) return {
                 exists: true,
                 product: product[0]
@@ -50,7 +54,7 @@ class Cart {
 
     async addToCart(idUser, idProduct, amount) {
         try {
-            const { exists, product } = await this.getOne(idUser, idProduct)
+            const { exists, product } = await this.getOneProductInOneCart(idUser, idProduct)
             if (exists) {
                 const result = await this.increaseAmount(
                     idUser,
@@ -80,11 +84,7 @@ class Cart {
     async increaseAmount(idUser, idProduct, amount, product) {
         try {
             const newAmount = product.amount + amount
-
-            const { items } = await CartModel.findOne({
-                idUser: idUser,
-            }).populate('items.product')
-
+            const items = await this.getOneCart(idUser)
             const productsInCart = items.filter(item => item.product.id !== idProduct)
 
             const result = await CartModel.findOneAndUpdate({
