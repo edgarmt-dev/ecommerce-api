@@ -25,8 +25,8 @@ class Product {
             const skip = (page - 1) * limit
             const products = await ProductModel.find().skip(skip).limit(limit)
 
-            const nextPage = `/api/products?${(page + 1)}`
-            const prevPage = `/api/products?${(page - 1)}`
+            const nextPage = totalPages < 2 ? null : `/api/products?${(page + 1)}`
+            const prevPage = page - 1 != 0 ? `/api/products?${(page - 1)}` : null
 
             return {
                 success: true,
@@ -90,7 +90,6 @@ class Product {
 
         }
     }
-
 }
 
 module.exports = Product

@@ -82,6 +82,9 @@ class Payment {
             message: 'OK'
         }
     }
+
+    
+
 }
 
 module.exports = Payment

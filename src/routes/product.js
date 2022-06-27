@@ -11,7 +11,7 @@ function product(app) {
     router.get('/', async (req, res) => {
         const { page, limit } = req.query
         const numberPage = parseInt(page) 
-        const products = await productService.getAll(numberPage, limit)
+        const products = await productService.getAll(limit, numberPage)
         return res.json(products)
     })
 
