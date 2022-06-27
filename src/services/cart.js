@@ -32,11 +32,16 @@ class Cart {
 
     async getOne(idUser, idProduct) {
         try {
-            const product = await CartModel.findOne({
+            const { items } = await CartModel.findOne({
                 idUser: idUser,
-                ['items.product']: idProduct
-            })
-            if (product) return { exists: true, product: product }
+            }).populate('items.product')
+
+            const product = items.filter(item => item.product.id === idProduct)
+
+            if (product) return {
+                exists: true,
+                product: product[0]
+            }
             return { exists: false }
         } catch (error) {
             console.log(error)
@@ -47,7 +52,12 @@ class Cart {
         try {
             const { exists, product } = await this.getOne(idUser, idProduct)
             if (exists) {
-                const result = await this.increaseAmount(idUser, idProduct, amount, product)
+                const result = await this.increaseAmount(
+                    idUser,
+                    idProduct,
+                    amount,
+                    product
+                )
                 return { success: true, result }
             }
             const result = await CartModel.findOneAndUpdate({
@@ -69,16 +79,24 @@ class Cart {
 
     async increaseAmount(idUser, idProduct, amount, product) {
         try {
-            const newAmount = product.items[0].amount + amount
+            const newAmount = product.amount + amount
+
+            const { items } = await CartModel.findOne({
+                idUser: idUser,
+            }).populate('items.product')
+
+            const productsInCart = items.filter(item => item.product.id !== idProduct)
 
             const result = await CartModel.findOneAndUpdate({
-                idUser: idUser,
-                ['items.product']: idProduct
+                idUser: idUser
             }, {
-                items: [{
-                    product: idProduct,
-                    amount: !amount ? product.items[0].amount + 1 : newAmount
-                }]
+                items: [
+                    ...productsInCart,
+                    {
+                        product: idProduct,
+                        amount: !amount ? product.amount + 1 : newAmount
+                    }
+                ]
             }, {
                 new: true
             }).populate('items.product')
