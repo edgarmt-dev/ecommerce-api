@@ -13,6 +13,8 @@ const config = {
     stripeSK: process.env.STRIPE_SK,
     paypalClientID: process.env.PAYPAL_CLIENT_ID,
     paypalClientSecret: process.env.PAYPAL_CLIENT_SECRET,
+    mercadopagoPublicKey: process.env.MERCADOPAGO_PUBLIC_KEY,
+    mercadopagoAccessToken: process.env.MERCADOPAGO_ACCESS_TOKEN,
     oAuthClientID: process.env.OAUTH_CLIENT_ID,
     oAuhtClientSecret: process.env.OAUTH_CLIENT_SECRET,
     ghClientID: process.env.GITHUB_CLIENT_ID,

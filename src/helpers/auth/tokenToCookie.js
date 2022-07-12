@@ -28,10 +28,10 @@ function tokenToCookieLocal(res, result, statusCode){
 
 function deleteCookie(res) {
     res.cookie('token', '', {
-        expires: new Date(),
         httpOnly: true,
+        secure: production,
         sameSite: "none",
-        secure: production
+        expires: new Date(),
     }).json({
         success: true,
         message: "Successfully logged out"

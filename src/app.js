@@ -19,6 +19,7 @@ const auth = require('./routes/auth')
 const user = require('./routes/user')
 const cart = require('./routes/cart')
 const product = require('./routes/product')
+const payments = require('./routes/payments')
 const webhooks = require('./routes/webhooks')
 
 //Middlewares
@@ -45,6 +46,7 @@ auth(app)
 user(app)
 cart(app)
 product(app)
+payments(app)
 webhooks(app)
 
 app.get('/', (req, res) => {

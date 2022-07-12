@@ -1,10 +1,10 @@
 const { stripeSK } = require('../config')
+const stripe = require('stripe')(stripeSK)
 const hasErrors = require('../helpers/errors/hasErrors')
 const pagination = require('../libs/pagination')
 const ProductModel = require('../models/product')
 const Cart = require('./cart')
 const Payment = require('./payment')
-const stripe = require('stripe')(stripeSK)
 
 class Product {
 
@@ -15,7 +15,7 @@ class Product {
 
     async getAll(limit = 20, page = 1) {
         try {
-           return await pagination(limit, page, ProductModel)
+           return await pagination(limit, page, ProductModel, '/api/products')
         } catch (error) {
             return {
                 success: false,

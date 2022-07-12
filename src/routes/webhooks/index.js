@@ -15,8 +15,9 @@ function webhooks(app) {
     })
 
     router.post('/stripe/one', async (req, res) => {
+        const sig = req.headers['stripe-signature']
         const result = await paymentService.confirmOne(req.body, sig)
-
+        
         return res.status(result.success ? 200 : 400).json(result)
     })
 }

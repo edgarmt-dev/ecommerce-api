@@ -38,10 +38,12 @@ class Cart {
         return items
     }
 
-    async getOneProductInOneCart(idUser, idProduct) {
+    async getProductInOneCart(idUser, idProduct) {
         try {
             const items = await this.getOneCart(idUser)
-            const product = items.filter(item => item.product.id === idProduct)
+            const product = items.filter(
+                (item) => item.product.id === idProduct
+            )
             if (product) return {
                 exists: true,
                 product: product[0]
@@ -54,7 +56,10 @@ class Cart {
 
     async addToCart(idUser, idProduct, amount) {
         try {
-            const { exists, product } = await this.getOneProductInOneCart(idUser, idProduct)
+            const { exists, product } = await this.getProductInOneCart(
+                idUser,
+                idProduct
+            )
             if (exists) {
                 const result = await this.increaseAmount(
                     idUser,
@@ -85,7 +90,9 @@ class Cart {
         try {
             const newAmount = product.amount + amount
             const items = await this.getOneCart(idUser)
-            const productsInCart = items.filter(item => item.product.id !== idProduct)
+            const productsInCart = items.filter(
+                (item) => item.product.id !== idProduct
+            )
 
             const result = await CartModel.findOneAndUpdate({
                 idUser: idUser
@@ -133,7 +140,11 @@ class Cart {
             }, 0) * 100
 
             if (total > 0) {
-                const clientSecret = await this.paymentService.createIntent(total, idUser, stripeCustomerID)
+                const clientSecret = await this.paymentService.createIntent(
+                    total,
+                    idUser,
+                    stripeCustomerID
+                )
                 return {
                     success: true,
                     clientSecret
