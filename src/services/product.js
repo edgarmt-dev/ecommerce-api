@@ -9,7 +9,6 @@ const Cart = require("./cart")
 const Payment = require("./payment")
 
 class Product {
-
 	constructor() {
 		this.cartService = new Cart()
 		this.paymentService = new Payment()
@@ -22,7 +21,7 @@ class Product {
 		} catch (error) {
 			return {
 				success: false,
-				error
+				error,
 			}
 		}
 	}
@@ -31,16 +30,16 @@ class Product {
 	async getOne(id) {
 		try {
 			const product = await ProductModel.findOne({
-				_id: id
+				_id: id,
 			})
 			return {
 				success: true,
-				product
+				product,
 			}
 		} catch (error) {
 			return {
 				success: false,
-				error
+				error,
 			}
 		}
 	}
@@ -51,7 +50,7 @@ class Product {
 			const product = await ProductModel.create(data)
 			return {
 				succes: true,
-				product
+				product,
 			}
 		} catch (error) {
 			return hasErrors(error)
@@ -73,17 +72,17 @@ class Product {
 				)
 				return {
 					success: true,
-					clientSecret
+					clientSecret,
 				}
 			}
 
 			return {
-				success: false
+				success: false,
 			}
 		} catch (error) {
 			return {
 				success: false,
-				error: error.message
+				error: error.message,
 			}
 		}
 	}

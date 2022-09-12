@@ -19,7 +19,7 @@ class Auth {
 			if (!result.user) {
 				return {
 					success: false,
-					messsage: "User not found"
+					messsage: "User not found",
 				}
 			}
 
@@ -30,7 +30,7 @@ class Auth {
 					success: false,
 					message: [
 						"Invalid credentials"
-					]
+					],
 				}
 			}
 			return this.#buildUserData(result.user)
@@ -44,7 +44,7 @@ class Auth {
 			data.password = await this.#encrypt(data.password)
 		}
 		data.provider = {
-			local: true
+			local: true,
 		}
 		const result = await this.userService.create(data)
 		if (!result.success) {
@@ -76,7 +76,7 @@ class Auth {
 			role: user.role,
 			provider: user.provider,
 			idProvider: user.idProvider,
-			stripeCustomerID: user.stripeCustomerID
+			stripeCustomerID: user.stripeCustomerID,
 		}
 		return this.#getToken(data)
 	}
@@ -97,12 +97,12 @@ class Auth {
 	// eslint-disable-next-line class-methods-use-this
 	#getToken(user) {
 		const token = jwt.sign(user, jwtSecret, {
-			expiresIn: "2d"
+			expiresIn: "2d",
 		})
 		return {
 			success: true,
 			user,
-			token
+			token,
 		}
 	}
 }

@@ -22,7 +22,7 @@ const config = {
 	fbAppID: process.env.FACEBOOK_APP_ID,
 	fbAppSecret: process.env.FACEBOOK_APP_SECRET,
 	callbackURL: process.env.CALLBACK_URL,
-	calllbackURLDev: process.env.CALLBACK_URL_DEV
+	calllbackURLDev: process.env.CALLBACK_URL_DEV,
 }
 
 module.exports = config

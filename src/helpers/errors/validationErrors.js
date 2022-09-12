@@ -1,15 +1,15 @@
 function validationErrors({
 	errors
 }) {
-	const errorsData = Object.keys(errors).map(item => ({
+	const errorsData = Object.keys(errors).map((item) => ({
 		field: item,
-		message: errors[item].message
+		message: errors[item].message,
 	}))
 
 	return {
 		success: false,
 		errorsData,
-		code: 400
+		code: 400,
 	}
 }
 

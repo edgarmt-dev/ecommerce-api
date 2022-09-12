@@ -3,7 +3,7 @@ const {
 	jwtSecret
 } = require("../config")
 
-const authValidation = role => {
+const authValidation = (role) => {
 	return (req, res, next) => {
 		req.neededRole = role
 		return validateToken(req, res, next)
@@ -15,7 +15,7 @@ const validateToken = (req, res, next) => {
 	if (!token) {
 		return res.status(403).json({
 			success: false,
-			message: "No token provider"
+			message: "No token provider",
 		})
 	}
 	return verifyToken(token, req, res, next)
@@ -34,7 +34,7 @@ const verifyToken = (token, req, res, next) => {
 		return res.status(403).json({
 			success: false,
 			message,
-			type: name
+			type: name,
 		})
 	}
 }
@@ -45,7 +45,7 @@ const validateRole = (req, res, next) => {
 	}
 	return res.status(403).json({
 		success: false,
-		message: "Dont have permissions"
+		message: "Dont have permissions",
 	})
 }
 

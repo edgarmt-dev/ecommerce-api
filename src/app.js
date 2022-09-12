@@ -26,16 +26,21 @@ const webhooks = require("./routes/webhooks")
 
 // Middlewares
 app.use(morgan("dev"))
-app.use("/api/webhooks/stripe", express.raw({
-	type: "application/json"
-}))
+app.use(
+	"/api/webhooks/stripe",
+	express.raw({
+		type: "application/json",
+	})
+)
 app.use(express.json())
-app.use(cors({
-	origin: [
-		"http://localhost:3000", "http://127.0.0.1:5500"
-	],
-	credentials: true
-}))
+app.use(
+	cors({
+		origin: [
+			"http://localhost:3000", "http://127.0.0.1:5500"
+		],
+		credentials: true,
+	})
+)
 app.use(cookieParser(jwtSecret))
 app.use(passport.initialize())
 
@@ -60,7 +65,7 @@ app.get("/", (req, res) => {
 		name: app.get("pkg").name,
 		version: app.get("pkg").version,
 		description: app.get("pkg").description,
-		author: app.get("pkg").author
+		author: app.get("pkg").author,
 	}
 	return res.json(data)
 })

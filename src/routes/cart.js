@@ -19,9 +19,7 @@ function cart(app) {
 			idProduct, amount
 		} = req.body
 		const result = await cartService.addToCart(req.user.id, idProduct, amount)
-		return res
-			.status(result.success ? 200 : 400)
-			.json(result)
+		return res.status(result.success ? 200 : 400).json(result)
 	})
 
 	router.delete("/remove-item", authValidation(1), async (req, res) => {
@@ -29,12 +27,10 @@ function cart(app) {
 			idProduct
 		} = req.body
 		const result = await cartService.removeFromCart(req.user.id, idProduct)
-		return res
-			.status(result.success ? 200 : 400)
-			.json(result)
+		return res.status(result.success ? 200 : 400).json(result)
 	})
 
-	router.put("/clear-out-cart", authValidation(1), async(req, res) => {
+	router.put("/clear-out-cart", authValidation(1), async (req, res) => {
 		const {
 			id
 		} = req.user
@@ -43,11 +39,13 @@ function cart(app) {
 		return res.json(result)
 	})
 
-	router.get("/pay", authValidation(1), async(req, res) => {
-		const result = await cartService.pay(req.user.id, req.user.stripeCustomerID)
+	router.get("/pay", authValidation(1), async (req, res) => {
+		const result = await cartService.pay(
+			req.user.id,
+			req.user.stripeCustomerID
+		)
 		return res.json(result)
 	})
-
 }
 
 module.exports = cart

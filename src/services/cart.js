@@ -2,7 +2,6 @@ const CartModel = require("../models/cart")
 const Payment = require("./payment")
 
 class Cart {
-
 	constructor() {
 		this.paymentService = new Payment()
 	}
@@ -12,23 +11,19 @@ class Cart {
 			const cart = await CartModel.create({
 				idUser,
 				items: [
-				]
+				],
 			})
 			return cart
-		} catch (error) {
-
-		}
+		} catch (error) {}
 	}
 
 	async getItems(idUser) {
 		try {
 			const items = await CartModel.findOne({
-				idUser: idUser
+				idUser: idUser,
 			}).populate("items.product")
 			return items
-		} catch (error) {
-
-		}
+		} catch (error) {}
 	}
 
 	async getOneCart(idUser) {
@@ -44,17 +39,15 @@ class Cart {
 	async getProductInOneCart(idUser, idProduct) {
 		try {
 			const items = await this.getOneCart(idUser)
-			const product = items.filter(
-				(item) => item.product.id === idProduct
-			)
+			const product = items.filter((item) => item.product.id === idProduct)
 			if (product) {
 				return {
 					exists: true,
-					product: product[0]
+					product: product[0],
 				}
 			}
 			return {
-				exists: false
+				exists: false,
 			}
 		} catch (error) {
 			console.log(error)
@@ -78,25 +71,29 @@ class Cart {
 				)
 				return {
 					success: true,
-					result
+					result,
 				}
 			}
-			const result = await CartModel.findOneAndUpdate({
-				idUser: idUser
-			}, {
-				$push: {
-					items: {
-						product: idProduct,
-						amount
-					}
+			const result = await CartModel.findOneAndUpdate(
+				{
+					idUser: idUser,
+				},
+				{
+					$push: {
+						items: {
+							product: idProduct,
+							amount,
+						},
+					},
+				},
+				{
+					new: true,
 				}
-			}, {
-				new: true
-			}).populate("items.product")
+			).populate("items.product")
 
 			return {
 				success: true,
-				result
+				result,
 			}
 		} catch (error) {
 			console.log(error)
@@ -111,19 +108,23 @@ class Cart {
 				(item) => item.product.id !== idProduct
 			)
 
-			const result = await CartModel.findOneAndUpdate({
-				idUser: idUser
-			}, {
-				items: [
-					...productsInCart,
-					{
-						product: idProduct,
-						amount: !amount ? product.amount + 1 : newAmount
-					}
-				]
-			}, {
-				new: true
-			}).populate("items.product")
+			const result = await CartModel.findOneAndUpdate(
+				{
+					idUser: idUser,
+				},
+				{
+					items: [
+						...productsInCart,
+						{
+							product: idProduct,
+							amount: !amount ? product.amount + 1 : newAmount,
+						},
+					],
+				},
+				{
+					new: true,
+				}
+			).populate("items.product")
 
 			return result
 		} catch (error) {
@@ -133,21 +134,25 @@ class Cart {
 
 	async removeFromCart(idUser, idProduct) {
 		try {
-			const result = await CartModel.findOneAndUpdate({
-				idUser: idUser
-			}, {
-				$pull: {
-					items: {
-						product: idProduct,
-					}
+			const result = await CartModel.findOneAndUpdate(
+				{
+					idUser: idUser,
+				},
+				{
+					$pull: {
+						items: {
+							product: idProduct,
+						},
+					},
+				},
+				{
+					new: true,
 				}
-			}, {
-				new: true
-			}).populate("items.product")
+			).populate("items.product")
 
 			return {
 				success: true,
-				result
+				result,
 			}
 		} catch (error) {
 			console.log(error)
@@ -159,9 +164,10 @@ class Cart {
 			const {
 				items
 			} = await this.getItems(idUser)
-			const total = items.reduce((result, item) => {
-				return result + item.product.price * item.amount
-			}, 0) * 100
+			const total =
+        items.reduce((result, item) => {
+        	return result + item.product.price * item.amount
+        }, 0) * 100
 
 			if (total > 0) {
 				const clientSecret = await this.paymentService.createIntent(
@@ -171,12 +177,12 @@ class Cart {
 				)
 				return {
 					success: true,
-					clientSecret
+					clientSecret,
 				}
 			}
 			return {
 				success: false,
-				message: "Value invalid"
+				message: "Value invalid",
 			}
 		} catch (error) {
 			console.log(error)
@@ -185,18 +191,21 @@ class Cart {
 
 	async clearOut(idUser) {
 		try {
-			const cart = await CartModel.findOneAndUpdate({
-				idUser: idUser
-			}, {
-				$pullAll: {
-					items: [
-					]
+			const cart = await CartModel.findOneAndUpdate(
+				{
+					idUser: idUser,
+				},
+				{
+					$pullAll: {
+						items: [
+						],
+					},
 				}
-			})
+			)
 
 			return {
 				success: true,
-				cart
+				cart,
 			}
 		} catch (error) {
 			console.log(error)

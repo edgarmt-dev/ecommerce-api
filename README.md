@@ -11,21 +11,24 @@
 ## Getting Started
 
 How first step clone the repository
+
 ```
 git clone https://github.com/edgarmontielt/ecommerce-api.git
 ```
+
 Install dependencies and node_modules
+
 ```
 npm install
 ```
 
 Run in enviroment local
+
 ```
 npm run dev
 ```
+
 Open http://localhost:4000 with your browser to see some details.
-
-
 
 ## Set enviroment variables
 

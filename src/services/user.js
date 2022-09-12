@@ -8,7 +8,6 @@ const Cart = require("../services/cart")
 const uuid = require("uuid")
 
 class User {
-
 	constructor() {
 		this.cartService = new Cart()
 	}
@@ -19,7 +18,7 @@ class User {
 			const users = await UserModel.find()
 			return {
 				success: true,
-				users
+				users,
 			}
 		} catch (error) {
 			return error
@@ -30,16 +29,16 @@ class User {
 	async getOneByEmail(email) {
 		try {
 			const user = await UserModel.findOne({
-				email: email
+				email: email,
 			})
 			return {
 				success: true,
-				user
+				user,
 			}
 		} catch (error) {
 			return {
 				success: false,
-				error: error.message
+				error: error.message,
 			}
 		}
 	}
@@ -49,17 +48,17 @@ class User {
 		try {
 			const customer = await stripe.customers.create({
 				name: data.name,
-				email: data.email
+				email: data.email,
 			})
 			stripeCustomerID = customer.id
 			const user = await UserModel.create({
 				...data,
-				stripeCustomerID
+				stripeCustomerID,
 			})
 			await this.cartService.create(user._id)
 			return {
 				success: true,
-				user
+				user,
 			}
 		} catch (error) {
 			const customer = await stripe.customers.del(stripeCustomerID)
@@ -70,47 +69,45 @@ class User {
 	async getOrCreateByProvider(data) {
 		const providerData = {
 			idProvider: {
-				[data.provider]: data.id
+				[data.provider]: data.id,
 			},
 			provider: {
-				[data.provider]: true
-			}
+				[data.provider]: true,
+			},
 		}
 		let user = await UserModel.findOne(providerData)
 
 		if (user) {
 			return {
 				success: true,
-				user
+				user,
 			}
 		}
 
 		data.password = uuid.v4()
 		const newData = {
 			...data,
-			...providerData
+			...providerData,
 		}
 		let stripeCustomerID
 		try {
 			const customer = await stripe.customers.create({
 				name: data.name,
-				email: data.email
+				email: data.email,
 			})
 			stripeCustomerID = customer.id
 			user = await UserModel.create({
 				...newData,
-				stripeCustomerID
+				stripeCustomerID,
 			})
 			await this.cartService.create(user._id)
 			return {
 				success: true,
-				user
+				user,
 			}
 		} catch (error) {
 			const customer = await stripe.customers.del(stripeCustomerID)
-			if (error.code === 11000 &&
-                error.keyValue.email
-			) {
+			if (error.code === 11000 && error.keyValue.email) {
 				const result = await this.updateProviders(error.keyValue.email, data)
 				if (result.success) {
 					return result
@@ -122,18 +119,22 @@ class User {
 
 	// eslint-disable-next-line class-methods-use-this
 	async updateProviders(email, data) {
-		const user = await UserModel.findOneAndUpdate({
-			email: email
-		}, {
-			[`provider.${data.provider}`]: true,
-			[`idProvider.${data.provider}`]: data.id
-		}, {
-			new: true,
-		})
+		const user = await UserModel.findOneAndUpdate(
+			{
+				email: email,
+			},
+			{
+				[`provider.${data.provider}`]: true,
+				[`idProvider.${data.provider}`]: data.id,
+			},
+			{
+				new: true,
+			}
+		)
 
 		return {
 			success: true,
-			user
+			user,
 		}
 	}
 }
