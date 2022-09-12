@@ -1,14 +1,16 @@
-function validationErrors({ errors }) {
-    const errorsData = Object.keys(errors).map(item => ({
-        field: item,
-        message: errors[item].message
-    })) 
+function validationErrors({
+	errors
+}) {
+	const errorsData = Object.keys(errors).map(item => ({
+		field: item,
+		message: errors[item].message
+	}))
 
-    return {
-        success: false,
-        errorsData,
-        code: 400
-    }
+	return {
+		success: false,
+		errorsData,
+		code: 400
+	}
 }
 
 module.exports = validationErrors
