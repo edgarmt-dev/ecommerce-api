@@ -10,7 +10,7 @@ function tokenToCookie(res, result, statusCode) {
 		return res
 			.cookie("token", token, {
 				httpOnly: true,
-				secure: false,
+				secure: true,
 				sameSite: "none",
 				expires: new Date(new Date().setDate(new Date().getDate() + 7)),
 			})
@@ -27,7 +27,7 @@ function tokenToCookieLocal(res, result, statusCode) {
 		return res
 			.cookie("token", token, {
 				httpOnly: true,
-				secure: production,
+				secure: true,
 				sameSite: "none",
 				expires: new Date(new Date().setDate(new Date().getDate() + 7)),
 			})
@@ -40,7 +40,7 @@ function deleteCookie(res) {
 	res
 		.cookie("token", "", {
 			httpOnly: true,
-			secure: production,
+			secure: true,
 			sameSite: "none",
 			expires: new Date(),
 		})

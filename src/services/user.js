@@ -61,7 +61,7 @@ class User {
 				user,
 			}
 		} catch (error) {
-			const customer = await stripe.customers.del(stripeCustomerID)
+			// const customer = await stripe.customers.del(stripeCustomerID)
 			return hasErrors(error)
 		}
 	}
@@ -106,7 +106,7 @@ class User {
 				user,
 			}
 		} catch (error) {
-			const customer = await stripe.customers.del(stripeCustomerID)
+			// const customer = await stripe.customers.del(stripeCustomerID)
 			if (error.code === 11000 && error.keyValue.email) {
 				const result = await this.updateProviders(error.keyValue.email, data)
 				if (result.success) {

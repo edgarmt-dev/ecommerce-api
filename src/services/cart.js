@@ -6,6 +6,7 @@ class Cart {
 		this.paymentService = new Payment()
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	async create(idUser) {
 		try {
 			const cart = await CartModel.create({
@@ -14,18 +15,30 @@ class Cart {
 				],
 			})
 			return cart
-		} catch (error) {}
+		} catch (error) {
+			return {
+				success: false,
+				error: error.message
+			}
+		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	async getItems(idUser) {
 		try {
 			const items = await CartModel.findOne({
 				idUser: idUser,
 			}).populate("items.product")
 			return items
-		} catch (error) {}
+		} catch (error) {
+			return {
+				success: false,
+				error: error.message
+			}
+		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	async getOneCart(idUser) {
 		const {
 			items
@@ -50,7 +63,10 @@ class Cart {
 				exists: false,
 			}
 		} catch (error) {
-			console.log(error)
+			return {
+				success: false,
+				error: error.message
+			}
 		}
 	}
 
@@ -96,7 +112,10 @@ class Cart {
 				result,
 			}
 		} catch (error) {
-			console.log(error)
+			return {
+				success: false,
+				error: error.message
+			}
 		}
 	}
 
@@ -128,10 +147,14 @@ class Cart {
 
 			return result
 		} catch (error) {
-			console.log(error)
+			return {
+				success: false,
+				error: error.message
+			}
 		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	async removeFromCart(idUser, idProduct) {
 		try {
 			const result = await CartModel.findOneAndUpdate(
@@ -155,7 +178,10 @@ class Cart {
 				result,
 			}
 		} catch (error) {
-			console.log(error)
+			return {
+				success: false,
+				error: error.message
+			}
 		}
 	}
 
@@ -165,9 +191,7 @@ class Cart {
 				items
 			} = await this.getItems(idUser)
 			const total =
-        items.reduce((result, item) => {
-        	return result + item.product.price * item.amount
-        }, 0) * 100
+            items.reduce((result, item) => result + item.product.price * item.amount, 0) * 100
 
 			if (total > 0) {
 				const clientSecret = await this.paymentService.createIntent(
@@ -185,10 +209,14 @@ class Cart {
 				message: "Value invalid",
 			}
 		} catch (error) {
-			console.log(error)
+			return {
+				success: false,
+				error: error.message
+			}
 		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	async clearOut(idUser) {
 		try {
 			const cart = await CartModel.findOneAndUpdate(
@@ -208,7 +236,10 @@ class Cart {
 				cart,
 			}
 		} catch (error) {
-			console.log(error)
+			return {
+				success: false,
+				error: error.message
+			}
 		}
 	}
 }

@@ -33,17 +33,15 @@ class Payment {
 		switch (event.type) {
 		case "payment_intent.succeeded":
 			// eslint-disable-next-line no-case-declarations
-			const paymentIntent = event.data.object
+			// const paymentIntent = event.data.object
 			// eslint-disable-next-line no-case-declarations
-			const stripeCustomerID = paymentIntent.customer
-
-			console.log(stripeCustomerID)
+			// const stripeCustomerID = paymentIntent.customer
 
 			// Then define and call a function to handle the event payment_intent.succeeded
 			break
 			// ... handle other event types
 		default:
-			console.log(`Unhandled event type ${event.type}`)
+			// console.log(`Unhandled event type ${event.type}`)
 		}
 
 		return {
@@ -75,7 +73,6 @@ class Payment {
 			const user = await UserModel.findOneAndUpdate({
 				stripeCustomerID,
 			})
-			console.log(user)
 
 			await CartModel.findOneAndUpdate(
 				{
@@ -94,7 +91,7 @@ class Payment {
 			break
 			// ... handle other event types
 		default:
-			console.log(`Unhandled event type ${event.type}`)
+			// console.log(`Unhandled event type ${event.type}`)
 		}
 
 		return {

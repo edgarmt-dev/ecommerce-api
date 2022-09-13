@@ -15,8 +15,6 @@ function auth(app) {
 	app.use("/api/auth", router)
 	const authService = new Auth()
 
-	// http:localhost:3000/api/auth
-
 	router.post("/login", async (req, res) => {
 		const result = await authService.logIn(req.body)
 		return tokenToCookieLocal(res, result, 401)
