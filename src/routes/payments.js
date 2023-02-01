@@ -1,12 +1,10 @@
-const {
-	Router
-} = require("express")
+const { Router } = require("express");
 
 function payments(app) {
-	const router = Router()
-	app.use("/api/payments", router)
+  const router = Router();
+  app.use("/api/payments", router);
 
-	router.get("/cart", async (req, res) => {})
+  router.get("/cart", async (req, res) => {});
 }
 
-module.exports = payments
+module.exports = payments;
