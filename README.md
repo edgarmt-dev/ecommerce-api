@@ -28,7 +28,9 @@ Run in enviroment local
 npm run dev
 ```
 
-Open http://localhost:4000 with your browser to see some details.
+Development: Open http://localhost:4000 with your browser to see some details.
+
+Production: Open https://ecommerceapi-351413.uc.r.appspot.com with your browser to see some details.
 
 ## Set enviroment variables
 
