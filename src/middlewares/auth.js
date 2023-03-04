@@ -22,6 +22,7 @@ const validateToken = (req, res, next) => {
 const verifyToken = (token, req, res, next) => {
   try {
     const decoded = jsonwebtoken.verify(token, jwtSecret);
+    console.log("DECODED:", decoded);
     delete decoded.iat;
     delete decoded.exp;
     req.user = decoded;

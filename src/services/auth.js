@@ -15,7 +15,7 @@ class Auth {
       if (!result.user) {
         return {
           success: false,
-          messsage: "User not found",
+          message: "User not found",
         };
       }
 
@@ -41,10 +41,12 @@ class Auth {
       local: true,
     };
     const result = await this.userService.create(data);
+    console.log("AUTH", result);
+
     if (!result.success) {
       return result;
     }
-    return this.#buildUserData(result);
+    return this.#buildUserData(result.user);
   }
 
   async authWithProvider(data) {
