@@ -10,6 +10,13 @@ const userSchema = new Schema({
     maxlength: [100, "max 100"],
     trim: true,
   },
+  lastName: {
+    type: String,
+    required: [true, "Name required"],
+    minlength: [3, "Name min of 3 characters"],
+    maxlength: [100, "max 100"],
+    trim: true,
+  },
   email: {
     type: String,
     required: [true, "Email is required"],
@@ -24,6 +31,13 @@ const userSchema = new Schema({
   role: {
     type: Number,
     default: 1,
+  },
+  country: {
+    type: String,
+    required: [true, "Country required"],
+    minlength: [3, "Min of 3 characters"],
+    maxlength: [100, "Max 100"],
+    trim: true,
   },
   stripeCustomerID: String,
   idProvider: {

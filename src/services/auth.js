@@ -8,6 +8,11 @@ class Auth {
     this.userService = new User();
   }
 
+  /**
+   *
+   * @param {{email, password}} credentials
+   * @returns
+   */
   async logIn(credentials) {
     try {
       const { email, password } = credentials;
@@ -33,6 +38,11 @@ class Auth {
     }
   }
 
+  /**
+   *
+   * @param {{id, name, lastName, email, password, role, provider, idProvider, stripeCustomerID, country}} user
+   * @returns
+   */
   async register(data) {
     if (data && data.password) {
       data.password = await this.#encrypt(data.password);
@@ -41,7 +51,6 @@ class Auth {
       local: true,
     };
     const result = await this.userService.create(data);
-    console.log("AUTH", result);
 
     if (!result.success) {
       return result;
@@ -64,33 +73,53 @@ class Auth {
     return result;
   }
 
+  /**
+   * Build structure data to response
+   * @param {{id, name, lastName, email, role, provider, idProvider, stripeCustomerID, country}} user
+   * @returns
+   */
   #buildUserData(user) {
     const data = {
       id: user._id,
       name: user.name,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
       provider: user.provider,
       idProvider: user.idProvider,
       stripeCustomerID: user.stripeCustomerID,
+      country: user.country,
     };
     return this.#getToken(data);
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   * Encrypt password to save in db
+   * @param {string} password
+   * @returns
+   */
   async #encrypt(password) {
     const salt = await bcrypt.genSalt(10);
     const res = await bcrypt.hash(password, salt);
     return res;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   * The function compare a encypt password with password from client
+   * @param {string} password
+   * @param {string} passwordEncrypt
+   * @returns
+   */
   async #compare(password, passwordEncrypt) {
     const res = await bcrypt.compare(password, passwordEncrypt);
     return res;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   * Create a token to auth users
+   * @param {{id, name, lastName, email, role, provider, idProvider, stripeCustomerID, country}} user
+   * @returns
+   */
   #getToken(user) {
     const token = jwt.sign(user, jwtSecret, {
       expiresIn: "2d",
