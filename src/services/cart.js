@@ -49,15 +49,20 @@ class Cart {
   async getProductInOneCart(idUser, idProduct) {
     try {
       const items = await this.getOneCart(idUser);
-      const product = items.filter((item) => item.product.id === idProduct);
-      if (product) {
+      if (items.length > 0) {
+        const product = items.filter((item) => item.product.id === idProduct);
+        if (product) {
+          return {
+            exists: true,
+            product: product[0],
+          };
+        }
         return {
-          exists: true,
-          product: product[0],
+          exists: false,
         };
       }
       return {
-        exists: false,
+        message: "No products",
       };
     } catch (error) {
       return {
@@ -87,13 +92,13 @@ class Cart {
       }
       const result = await CartModel.findOneAndUpdate(
         {
-          idUser: idUser,
+          idUser,
         },
         {
           $push: {
             items: {
               product: idProduct,
-              amount,
+              amount: 1,
             },
           },
         },
