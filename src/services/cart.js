@@ -46,6 +46,7 @@ class Cart {
     return items;
   }
 
+  // TODO: Verify services and flow
   async getProductInOneCart(idUser, idProduct) {
     try {
       const items = await this.getOneCart(idUser);
@@ -65,6 +66,7 @@ class Cart {
         message: "No products",
       };
     } catch (error) {
+      console.log("ERROR", error);
       return {
         success: false,
         error: error.message,
@@ -147,6 +149,8 @@ class Cart {
 
       return result;
     } catch (error) {
+      // TODO: fix error
+      console.log("ERROR", error);
       return {
         success: false,
         error: error.message,
