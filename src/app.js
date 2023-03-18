@@ -12,6 +12,7 @@ const {
 const { jwtSecret } = require("./config");
 
 const app = express();
+
 app.set("pkg", pkg);
 
 // Routes import
