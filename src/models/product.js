@@ -1,8 +1,6 @@
-const {
-  mongoose: { Schema, model },
-} = require("../config/db");
+const { mongoose } = require("../config/db");
 
-const productsSchema = new Schema({
+const productsSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Name required"],
@@ -13,20 +11,22 @@ const productsSchema = new Schema({
     required: [true, "Image required"],
   },
   price: {
-    type: String,
+    type: mongoose.Types.Decimal128,
     required: [true, "Price required"],
   },
   categories: {
-    type: String,
+    type: [String],
     enum: [
-      "Audio",
-      "Computation",
-      "Electronic",
-      "Security",
       "Tools",
+      "Boards",
+      "Leds",
+      "Integrated",
+      "Accesories",
       "Cables",
-      "Phones",
-      "Global",
+      "Adapters",
+      "Network",
+      "Resistences",
+      "Default",
     ],
     default: "Global",
   },
@@ -34,6 +34,7 @@ const productsSchema = new Schema({
     type: Number,
     default: 1,
   },
+  reviews: [{ ref: "Review", type: mongoose.Types.ObjectId }],
 });
 
-module.exports = model("Product", productsSchema);
+module.exports = mongoose.model("Product", productsSchema);

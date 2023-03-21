@@ -5,6 +5,7 @@
 const hasErrors = require("../helpers/errors/hasErrors");
 const pagination = require("../libs/pagination");
 const ProductModel = require("../models/product");
+const ReviewModel = require("../models/reviews");
 const Cart = require("./cart");
 const Payment = require("./payment");
 
@@ -31,12 +32,15 @@ class Product {
     try {
       const product = await ProductModel.findOne({
         _id: id,
-      });
+      }).populate("reviews");
+
+      console.log(product);
       return {
         success: true,
         product,
       };
     } catch (error) {
+      console.log({ ...error });
       return {
         success: false,
         error,
@@ -57,6 +61,30 @@ class Product {
     }
   }
 
+  /**
+   *
+   * @param {{ idUser, idProduct, stars, comment }}
+   * @returns
+   */
+  async addReview(data) {
+    try {
+      const response = await ReviewModel.create(data);
+      return {
+        success: true,
+        response,
+      };
+    } catch (error) {
+      return hasErrors(error);
+    }
+  }
+
+  /**
+   * Function to pay products
+   * @param {*} idUser
+   * @param {*} stripeCustomerID
+   * @param {*} idProduct
+   * @returns
+   */
   async pay(idUser, stripeCustomerID, idProduct) {
     try {
       const { product } = await this.getOne(idProduct);
