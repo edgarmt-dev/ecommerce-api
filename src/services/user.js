@@ -121,7 +121,7 @@ class User {
   async updateProviders(email, data) {
     const user = await UserModel.findOneAndUpdate(
       {
-        email: email,
+        email,
       },
       {
         [`provider.${data.provider}`]: true,

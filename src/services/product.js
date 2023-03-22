@@ -32,9 +32,10 @@ class Product {
     try {
       const product = await ProductModel.findOne({
         _id: id,
-      }).populate("reviews");
-
-      console.log(product);
+      }).populate({
+        path: "reviews",
+        populate: [{ path: "idUser", select: "name lastName country" }],
+      });
       return {
         success: true,
         product,
@@ -69,6 +70,30 @@ class Product {
   async addReview(data) {
     try {
       const response = await ReviewModel.create(data);
+      const updateProduct = await this.addReviewToProductById(
+        data.idProduct,
+        response._id
+      );
+      if (updateProduct.success) {
+        return {
+          success: true,
+          response,
+        };
+      }
+    } catch (error) {
+      return hasErrors(error);
+    }
+  }
+
+  async addReviewToProductById(idProduct, idReview) {
+    try {
+      const response = await ProductModel.findOneAndUpdate(
+        { _id: idProduct },
+        {
+          $push: { reviews: idReview },
+        }
+      );
+
       return {
         success: true,
         response,
