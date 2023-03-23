@@ -10,9 +10,13 @@ const reviewsSchema = new Schema({
   stars: {
     type: Number,
   },
+  title: {
+    type: String,
+    required: [true, "Title required"],
+  },
   comment: {
     type: String,
-    required: [true, "Price required"],
+    required: [true, "Comment required"],
   },
   date: {
     type: Schema.Types.Date,
