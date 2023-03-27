@@ -8,9 +8,15 @@ function product(app) {
   const productService = new Product();
 
   router.get("/", async (req, res) => {
-    const { page, limit } = req.query;
+    const { page, limit, cat } = req.query;
     const numberPage = parseInt(page);
     const products = await productService.getAll(limit, numberPage);
+    return res.json(products);
+  });
+
+  router.get("/category", async (req, res) => {
+    const { page, limit, cat } = req.query;
+    const products = await productService.getProductsByCategory(cat);
     return res.json(products);
   });
 

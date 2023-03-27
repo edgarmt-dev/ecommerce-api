@@ -15,7 +15,12 @@ class Product {
     this.paymentService = new Payment();
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   * Function that get all products
+   * @param {number} limit
+   * @param {number} page
+   * @returns
+   */
   async getAll(limit = 20, page = 1) {
     try {
       return await pagination(limit, page, ProductModel, "/api/products");
@@ -24,6 +29,30 @@ class Product {
         success: false,
         error,
       };
+    }
+  }
+
+  /**
+   * Function that get products by category
+   * @param {string} cat
+   * @param {number} limit
+   * @param {number} page
+   * @returns
+   */
+  async getProductsByCategory(cat, limit = 20, page = 1) {
+    try {
+      // return await pagination(limit, page, ProductModel, "/api/products");
+      console.log(cat);
+      const response = await ProductModel.find({
+        categories: cat,
+      }).populate({
+        path: "reviews",
+        populate: [{ path: "idUser", select: "name lastName country" }],
+      });
+      return response;
+    } catch (error) {
+      console.log(error);
+      return error;
     }
   }
 

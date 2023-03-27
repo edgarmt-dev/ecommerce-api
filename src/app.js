@@ -37,7 +37,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://127.0.0.1:5500",
-      "https://ecommerce-front-phi-seven.vercel.app/",
+      "https://fixly.vercel.app",
     ],
     credentials: true,
   })
