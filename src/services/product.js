@@ -42,7 +42,7 @@ class Product {
   async getProductsByCategory(cat, limit = 20, page = 1) {
     try {
       // return await pagination(limit, page, ProductModel, "/api/products");
-      console.log(cat);
+      console.log(cat, limit, page);
       const response = await ProductModel.find({
         categories: cat,
       }).populate({
@@ -56,7 +56,11 @@ class Product {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   * Get a product by _id of mondgodb
+   * @param {*} id
+   * @returns
+   */
   async getOne(id) {
     try {
       const product = await ProductModel.findOne({
@@ -78,7 +82,11 @@ class Product {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   * The function create a new product in db
+   * @param {*} data
+   * @returns
+   */
   async createProduct(data) {
     try {
       const product = await ProductModel.create(data);
@@ -92,8 +100,8 @@ class Product {
   }
 
   /**
-   *
-   * @param {{ idUser, idProduct, stars, comment }}
+   * The function add a new review to some product, and make relations with the models
+   * @param {{ idUser, idProduct, stars, comment }} data
    * @returns
    */
   async addReview(data) {
@@ -113,7 +121,12 @@ class Product {
       return hasErrors(error);
     }
   }
-
+  /**
+   * Make the relation of product model with reviews model
+   * @param {*} idProduct
+   * @param {*} idReview
+   * @returns
+   */
   async addReviewToProductById(idProduct, idReview) {
     try {
       const response = await ProductModel.findOneAndUpdate(

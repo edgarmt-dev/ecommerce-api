@@ -10,36 +10,8 @@
     "ecmaVersion": "latest"
   },
   "rules": {
-    "indent": ["error", "tab"],
-    "linebreak-style": ["error", "unix"],
+    "indent": ["error", 2],
     "quotes": ["error", "double"],
-    "semi": ["error", "never"],
-    // Aditional rules
-    "camelcase": "error",
-    "class-methods-use-this": "error",
-    "curly": "error",
-    "default-case": "error",
-    "eqeqeq": "error",
-    "no-console": "warn",
-    "no-duplicate-imports": "error",
-    "no-new-func": "error",
-    "no-return-await": "error",
-    "no-unused-vars": "warn",
-    "no-var": "error",
-    "spaced-comment": "error",
-    // Code Style
-    "array-bracket-newline": ["error", "always"],
-    "array-element-newline": ["error", "consistent"],
-    "arrow-spacing": "error",
-    "block-spacing": "error",
-    "brace-style": ["error", "1tbs"],
-    "comma-spacing": "error",
-    "keyword-spacing": "error",
-    "no-extra-parens": "error",
-    "no-multi-spaces": "error",
-    "no-multiple-empty-lines": "error",
-    "no-trailing-spaces": "error",
-    "object-curly-newline": ["error", "always"],
-    "object-property-newline": "error"
+    "semi": "warn"
   }
 }

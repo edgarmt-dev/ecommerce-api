@@ -11,7 +11,7 @@ const authValidation = (role) => {
 const validateToken = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
-    return res.status(403).json({
+    return res.status(401).json({
       success: false,
       message: "No token provider",
     });
@@ -27,7 +27,7 @@ const verifyToken = (token, req, res, next) => {
     req.user = decoded;
     return validateRole(req, res, next);
   } catch ({ message, name }) {
-    return res.status(403).json({
+    return res.status(401).json({
       success: false,
       message,
       type: name,
@@ -39,7 +39,7 @@ const validateRole = (req, res, next) => {
   if (req.user.role >= req.neededRole) {
     return next();
   }
-  return res.status(403).json({
+  return res.status(401).json({
     success: false,
     message: "Dont have permissions",
   });

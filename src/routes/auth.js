@@ -20,7 +20,6 @@ function auth(app) {
 
   router.post("/register", async (req, res) => {
     const result = await authService.register(req.body);
-    console.log(result);
     return tokenToCookieLocal(res, result, 401);
   });
 

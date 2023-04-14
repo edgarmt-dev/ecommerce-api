@@ -6,7 +6,11 @@ class Cart {
     this.paymentService = new Payment();
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   * Create a new cart to new user register
+   * @param {ObjectId} idUser
+   * @returns
+   */
   async create(idUser) {
     try {
       const cart = await CartModel.create({
@@ -22,7 +26,11 @@ class Cart {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   * The function get all products of a user by _id
+   * @param {ObjectId} idUser
+   * @returns
+   */
   async getItems(idUser) {
     try {
       const items = await CartModel.findOne({
@@ -37,7 +45,11 @@ class Cart {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   *
+   * @param {ObjectId} idUser
+   * @returns
+   */
   async getOneCart(idUser) {
     const { items } = await CartModel.findOne({
       idUser: idUser,
@@ -74,6 +86,13 @@ class Cart {
     }
   }
 
+  /**
+   *
+   * @param {ObjectId} idUser
+   * @param {ObjectId} idProduct
+   * @param {number} amount
+   * @returns
+   */
   async addToCart(idUser, idProduct, amount) {
     try {
       const { exists, product } = await this.getProductInOneCart(
@@ -121,6 +140,14 @@ class Cart {
     }
   }
 
+  /**
+   *
+   * @param {ObjectId} idUser
+   * @param {ObjectId} idProduct
+   * @param {number} amount
+   * @param {object} product
+   * @returns
+   */
   async increaseAmount(idUser, idProduct, amount, product) {
     try {
       const newAmount = product.amount + amount;
@@ -158,7 +185,12 @@ class Cart {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   *
+   * @param {*} idUser
+   * @param {*} idProduct
+   * @returns
+   */
   async removeFromCart(idUser, idProduct) {
     try {
       const result = await CartModel.findOneAndUpdate(
@@ -189,6 +221,12 @@ class Cart {
     }
   }
 
+  /**
+   *
+   * @param {*} idUser
+   * @param {*} stripeCustomerID
+   * @returns
+   */
   async pay(idUser, stripeCustomerID) {
     try {
       const { items } = await this.getItems(idUser);
@@ -221,7 +259,11 @@ class Cart {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  /**
+   *
+   * @param {*} idUser
+   * @returns
+   */
   async clearOut(idUser) {
     try {
       const cart = await CartModel.findOneAndUpdate(

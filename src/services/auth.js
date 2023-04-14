@@ -9,8 +9,8 @@ class Auth {
   }
 
   /**
-   *
-   * @param {{email, password}} credentials
+   * Make a authentication process to some user by credentials(email, password)
+   * @param {*} credentials
    * @returns
    */
   async logIn(credentials) {
@@ -32,15 +32,16 @@ class Auth {
           message: ["Invalid credentials"],
         };
       }
-      return this.#buildUserData(result.user);
+      const resp = this.#buildUserData(result.user);
+      return resp;
     } catch (error) {
       return error;
     }
   }
 
   /**
-   *
-   * @param {{id, name, lastName, email, password, role, provider, idProvider, stripeCustomerID, country}} user
+   * Register a new user with request data from front app
+   * @param {*} user
    * @returns
    */
   async register(data) {
@@ -75,7 +76,7 @@ class Auth {
 
   /**
    * Build structure data to response
-   * @param {{id, name, lastName, email, role, provider, idProvider, stripeCustomerID, country}} user
+   * @param {*} user
    * @returns
    */
   #buildUserData(user) {
@@ -117,7 +118,7 @@ class Auth {
 
   /**
    * Create a token to auth users
-   * @param {{id, name, lastName, email, role, provider, idProvider, stripeCustomerID, country}} user
+   * @param {*} user
    * @returns
    */
   #getToken(user) {
