@@ -9,7 +9,7 @@ const ReviewModel = require("../models/reviews");
 const Cart = require("./cart");
 const Payment = require("./payment");
 
-class Product {
+class ProductService {
   constructor() {
     this.cartService = new Cart();
     this.paymentService = new Payment();
@@ -49,6 +49,7 @@ class Product {
         path: "reviews",
         populate: [{ path: "idUser", select: "name lastName country" }],
       });
+      console.log(response);
       return response;
     } catch (error) {
       console.log(error);
@@ -181,4 +182,4 @@ class Product {
   }
 }
 
-module.exports = Product;
+module.exports = ProductService;

@@ -16,11 +16,11 @@ const app = express();
 app.set("pkg", pkg);
 
 // Routes import
-const auth = require("./routes/auth");
-const user = require("./routes/user");
-const cart = require("./routes/cart");
-const product = require("./routes/product");
-const payments = require("./routes/payments");
+const auth = require("./routes/auth.router");
+const user = require("./routes/user.router");
+const cart = require("./routes/cart.router");
+const product = require("./routes/product.router");
+const payments = require("./routes/payments.router");
 const webhooks = require("./routes/webhooks");
 
 // Middlewares

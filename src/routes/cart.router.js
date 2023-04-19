@@ -15,7 +15,6 @@ function cart(app) {
   router.post("/add-item", authValidation(1), async (req, res) => {
     const { idProduct, amount } = req.body;
     const result = await cartService.addToCart(req.user.id, idProduct, amount);
-    console.log(result);
     return res.status(result.success ? 200 : 400).json(result);
   });
 
