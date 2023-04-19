@@ -28,6 +28,7 @@ class Payment {
       };
     }
 
+    /*eslint indent: ["error", 2, { "SwitchCase": 1 }]*/
     switch (event.type) {
       case "payment_intent.succeeded":
         // eslint-disable-next-line no-case-declarations

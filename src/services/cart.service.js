@@ -1,7 +1,7 @@
 const CartModel = require("../models/cart");
 const Payment = require("./payment.service");
 
-class Cart {
+class CartService {
   constructor() {
     this.paymentService = new Payment();
   }
@@ -36,7 +36,7 @@ class Cart {
       const items = await CartModel.findOne({
         idUser: idUser,
       }).populate("items.product");
-      return items;
+      return { success: true, data: items };
     } catch (error) {
       return {
         success: false,
@@ -290,4 +290,4 @@ class Cart {
   }
 }
 
-module.exports = Cart;
+module.exports = CartService;

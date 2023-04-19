@@ -7,11 +7,14 @@
   "extends": "eslint:recommended",
   "overrides": [],
   "parserOptions": {
-    "ecmaVersion": "latest"
+    "ecmaVersion": "latest",
+    "sourceType": "module"
   },
   "rules": {
     "indent": ["error", 2],
+    "default-case": "off",
     "quotes": ["error", "double"],
-    "semi": "warn"
+    "semi": "warn",
+    "no-unused-vars": "error"
   }
 }
