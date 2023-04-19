@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const Payment = require("../../services/payment");
+const Payment = require("../../services/payment.service");
 
 function webhooks(app) {
   const router = Router();

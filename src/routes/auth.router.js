@@ -1,38 +1,19 @@
 const { Router } = require("express");
-const {
-  tokenToCookie,
-  deleteCookie,
-  tokenToCookieLocal,
-} = require("../helpers/auth/tokenToCookie");
-const Auth = require("../services/auth");
 const passport = require("passport");
 const authValidation = require("../middlewares/auth");
+const AuthService = require("../services/auth.service");
+const AuthController = require("../controllers/auth.controller");
 
 function auth(app) {
   const router = Router();
   app.use("/api/auth", router);
-  const authService = new Auth();
+  const authService = new AuthService();
+  const authController = new AuthController(authService);
 
-  router.post("/login", async (req, res) => {
-    const result = await authService.logIn(req.body);
-    return tokenToCookieLocal(res, result, 401);
-  });
-
-  router.post("/register", async (req, res) => {
-    const result = await authService.register(req.body);
-    return tokenToCookieLocal(res, result, 401);
-  });
-
-  router.get("/validate", authValidation(1), (req, res) => {
-    return res.json({
-      success: true,
-      user: req.user,
-    });
-  });
-
-  router.get("/logout", (req, res) => {
-    return deleteCookie(res);
-  });
+  router.post("/login", authController.login);
+  router.post("/register", authController.register);
+  router.get("/validate", authValidation(1), authController.validate);
+  router.get("/logout", authController.validate);
 
   router.get(
     "/google",
@@ -40,17 +21,13 @@ function auth(app) {
       scope: ["email", "profile"],
     })
   );
-
   router.get(
     "/google/callback",
     passport.authenticate("google", {
       session: false,
       failureRedirect: "/",
     }),
-    async (req, res) => {
-      const result = await authService.authWithProvider(req.user.profile);
-      return tokenToCookie(res, result);
-    }
+    authController.loginWhitProvider
   );
 
   router.get(
@@ -59,20 +36,13 @@ function auth(app) {
       scope: ["email"],
     })
   );
-
   router.get(
     "/facebook/callback",
     passport.authenticate("facebook", {
       session: false,
       failureRedirect: "/",
     }),
-    async (req, res) => {
-      const result = await authService.authWithProvider(req.user.profile);
-      if (result.success) {
-        return tokenToCookie(res, result);
-      }
-      return res.json(result);
-    }
+    authController.loginWhitProvider
   );
 
   router.get(
@@ -81,20 +51,13 @@ function auth(app) {
       scope: ["user:email"],
     })
   );
-
   router.get(
     "/github/callback",
     passport.authenticate("github", {
       failureRedirect: "/",
       session: false,
     }),
-    async (req, res) => {
-      const result = await authService.authWithProvider(req.user.profile);
-      if (result.success) {
-        return tokenToCookie(res, result);
-      }
-      return res.json(result);
-    }
+    authController.loginWhitProvider
   );
 }
 

@@ -1,9 +1,9 @@
-const User = require("./user");
+const User = require("./user.service");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { jwtSecret } = require("../config");
 
-class Auth {
+class AuthService {
   constructor() {
     this.userService = new User();
   }
@@ -133,4 +133,4 @@ class Auth {
   }
 }
 
-module.exports = Auth;
+module.exports = AuthService;

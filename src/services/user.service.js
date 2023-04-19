@@ -2,7 +2,7 @@ const hasErrors = require("../helpers/errors/hasErrors");
 const UserModel = require("../models/user");
 const { stripeSK } = require("../config");
 const stripe = require("stripe")(stripeSK);
-const Cart = require("../services/cart");
+const Cart = require("./cart.service");
 const uuid = require("uuid");
 
 class User {

@@ -6,8 +6,8 @@ const hasErrors = require("../helpers/errors/hasErrors");
 const pagination = require("../libs/pagination");
 const ProductModel = require("../models/product");
 const ReviewModel = require("../models/reviews");
-const Cart = require("./cart");
-const Payment = require("./payment");
+const Cart = require("./cart.service");
+const Payment = require("./payment.service");
 
 class ProductService {
   constructor() {

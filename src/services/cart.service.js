@@ -1,5 +1,5 @@
 const CartModel = require("../models/cart");
-const Payment = require("./payment");
+const Payment = require("./payment.service");
 
 class Cart {
   constructor() {

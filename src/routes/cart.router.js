@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const authValidation = require("../middlewares/auth");
-const Cart = require("../services/cart");
+const Cart = require("../services/cart.service");
 
 function cart(app) {
   const router = Router();
