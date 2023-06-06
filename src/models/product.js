@@ -25,7 +25,7 @@ const productsSchema = new mongoose.Schema({
       "Cables",
       "Adapters",
       "Network",
-      "Resistences",
+      "Resistances",
       "Default",
     ],
     default: "Global",

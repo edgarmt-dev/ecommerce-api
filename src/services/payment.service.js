@@ -6,7 +6,6 @@ const endpointSecret =
   "whsec_a7f36c3228e31ba39014992c089fb1704d83bd3206b5757ac5b51679463c9fdb";
 
 class Payment {
-  // eslint-disable-next-line class-methods-use-this
   async createIntent(amount, idUser, stripeCustomerID) {
     const intent = await stripe.paymentIntents.create({
       amount,
@@ -16,7 +15,6 @@ class Payment {
     return intent.client_secret;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async confirmOne(data, signature) {
     let event;
     try {
@@ -49,7 +47,6 @@ class Payment {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async confirm(data, signature) {
     let event;
     try {

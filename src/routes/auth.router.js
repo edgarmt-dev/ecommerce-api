@@ -12,8 +12,9 @@ function auth(app) {
 
   router.post("/login", authController.login);
   router.post("/register", authController.register);
+  router.get("/auth-cookies", authController.getCookies);
   router.get("/validate", authValidation(1), authController.validate);
-  router.get("/logout", authController.validate);
+  router.get("/logout", authController.logout);
 
   router.get(
     "/google",

@@ -53,7 +53,7 @@ passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-// Routes
+// Routers
 auth(app);
 user(app);
 cart(app);

@@ -22,7 +22,9 @@ class ProductController {
   };
 
   create = async (req, res) => {
+    console.log(req.body);
     const response = await this.productService.createProduct(req.body);
+    console.log(response);
     return this.returnResponse(res, response);
   };
 

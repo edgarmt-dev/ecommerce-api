@@ -49,11 +49,9 @@ class ProductService {
         path: "reviews",
         populate: [{ path: "idUser", select: "name lastName country" }],
       });
-      console.log(response);
-      return response;
+      return { success: true, data: response };
     } catch (error) {
-      console.log(error);
-      return error;
+      return { succes: false, error };
     }
   }
 
@@ -92,7 +90,7 @@ class ProductService {
     try {
       const product = await ProductModel.create(data);
       return {
-        succes: true,
+        success: true,
         product,
       };
     } catch (error) {

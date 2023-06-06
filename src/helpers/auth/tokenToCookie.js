@@ -34,7 +34,7 @@ function tokenToCookieLocal(res, result, statusCode) {
 
 function deleteCookie(res) {
   res
-    .cookie("token", "", {
+    .cookie("token", null, {
       httpOnly: true,
       secure: true,
       sameSite: "none",

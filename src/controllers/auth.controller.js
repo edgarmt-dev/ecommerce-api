@@ -12,11 +12,21 @@ class AuthController {
   login = async (req, res) => {
     const response = await this.authService.logIn(req.body);
     return tokenToCookieLocal(res, response, 401);
+    // return res.status(response.success ? 200 : 401).json(response);
   };
 
   register = async (req, res) => {
     const response = await this.authService.register(req.body);
     return tokenToCookieLocal(res, response, 401);
+  };
+
+  getCookies = (req, res) => {
+    console.log("cookies", req.cookies);
+    const { cookieName } = req.query;
+    const data = {
+      token: req.cookies[cookieName],
+    };
+    res.json(data);
   };
 
   validate = (req, res) => {
