@@ -23,6 +23,9 @@ const config = {
   fbAppSecret: process.env.FACEBOOK_APP_SECRET,
   callbackURL: process.env.CALLBACK_URL,
   calllbackURLDev: process.env.CALLBACK_URL_DEV,
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  cloudinaryApiKey: process.env.CLOUINARY_API_KEY,
+  cloudinaryApiSecret: process.env.CLOUINARY_API_SECRET,
 };
 
 module.exports = config;

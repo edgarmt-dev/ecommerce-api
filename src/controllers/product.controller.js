@@ -22,8 +22,8 @@ class ProductController {
   };
 
   create = async (req, res) => {
-    console.log(req.body);
-    const response = await this.productService.createProduct(req.body);
+    const { body: data, file } = req;
+    const response = await this.productService.createProduct(data, file);
     console.log(response);
     return this.returnResponse(res, response);
   };

@@ -8,6 +8,7 @@ const ProductModel = require("../models/product");
 const ReviewModel = require("../models/reviews");
 const Cart = require("./cart.service");
 const Payment = require("./payment.service");
+const uploadFiles = require("../libs/uploadFiles");
 
 class ProductService {
   constructor() {
@@ -86,8 +87,16 @@ class ProductService {
    * @param {*} data
    * @returns
    */
-  async createProduct(data) {
+  async createProduct(data, file) {
     try {
+      const imagesResponse = await uploadFiles(file.path);
+
+      if (!imagesResponse.success)
+        throw new Error("Error", {
+          error: "Images not uploaded",
+        });
+
+      product.imgURL = [imagesResponse];
       const product = await ProductModel.create(data);
       return {
         success: true,
