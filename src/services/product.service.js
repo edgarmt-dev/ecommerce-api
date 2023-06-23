@@ -89,6 +89,7 @@ class ProductService {
    */
   async createProduct(data, file) {
     try {
+      console.log(data);
       const imagesResponse = await uploadFiles(file.path);
 
       if (!imagesResponse.success)
@@ -96,7 +97,7 @@ class ProductService {
           error: "Images not uploaded",
         });
 
-      product.imgURL = [imagesResponse];
+      data.imgURL = [imagesResponse.url];
       const product = await ProductModel.create(data);
       return {
         success: true,

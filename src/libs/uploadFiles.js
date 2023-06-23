@@ -5,10 +5,9 @@ async function uploadFiles(filePath) {
     const cloudinaryResponse = await cloudinary.uploader.upload(filePath, {
       folder: "fixly-ecommerce",
     });
-    console.log(cloudinaryResponse);
     return {
       success: true,
-      response: cloudinaryResponse.public_id,
+      url: cloudinaryResponse.secure_url,
     };
   } catch (error) {
     return {

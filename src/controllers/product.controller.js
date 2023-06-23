@@ -22,9 +22,9 @@ class ProductController {
   };
 
   create = async (req, res) => {
-    const { body: data, file } = req;
+    const { body, file } = req;
+    const data = Object.assign({}, body);
     const response = await this.productService.createProduct(data, file);
-    console.log(response);
     return this.returnResponse(res, response);
   };
 
