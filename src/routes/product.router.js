@@ -17,7 +17,7 @@ function product(app) {
   router.post(
     "/create",
     authValidation(10),
-    upload.single("img"),
+    upload.array("img"),
     productController.create
   );
   router.post("/add-review", authValidation(1), productController.addReview);

@@ -74,7 +74,6 @@ class ProductService {
         product,
       };
     } catch (error) {
-      console.log({ ...error });
       return {
         success: false,
         error,
@@ -84,20 +83,21 @@ class ProductService {
 
   /**
    * The function create a new product in db
-   * @param {*} data
+   * @param {Object} data
+   * @param {File[]} files
    * @returns
    */
-  async createProduct(data, file) {
+  async createProduct(data, files) {
     try {
-      console.log(data);
-      const imagesResponse = await uploadFiles(file.path);
+      const { success, imagesURl } = await this.#uploadImages(files);
 
-      if (!imagesResponse.success)
+      if (!success)
         throw new Error("Error", {
           error: "Images not uploaded",
         });
 
-      data.imgURL = [imagesResponse.url];
+      data.imgURL = imagesURl;
+      data.categories = data.categories.split(",");
       const product = await ProductModel.create(data);
       return {
         success: true,
@@ -105,6 +105,31 @@ class ProductService {
       };
     } catch (error) {
       return hasErrors(error);
+    }
+  }
+
+  /**
+   * Private service to run upload array images
+   * @param {File} images
+   * @returns
+   */
+  async #uploadImages(images) {
+    try {
+      const imagesURl = await Promise.all(
+        images.map(async (image) => {
+          const response = await uploadFiles(image.path);
+          return response.url;
+        })
+      );
+      return {
+        success: true,
+        imagesURl,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      };
     }
   }
 
