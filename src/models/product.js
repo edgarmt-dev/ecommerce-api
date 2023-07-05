@@ -1,40 +1,57 @@
-const { mongoose } = require("../config/db");
+const {
+  mongoose
+} = require('../config/db')
 
 const productsSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Name required"],
+    required: [
+      true, 'Name required'
+    ],
   },
   description: String,
   imgURL: {
-    type: [String],
-    required: [true, "Image required"],
+    type: [
+      String
+    ],
+    required: [
+      true, 'Image required'
+    ],
   },
   price: {
     type: mongoose.Types.Decimal128,
-    required: [true, "Price required"],
+    required: [
+      true, 'Price required'
+    ],
   },
   categories: {
-    type: [String],
-    enum: [
-      "Tools",
-      "Boards",
-      "Leds",
-      "Integrated",
-      "Accesories",
-      "Cables",
-      "Adapters",
-      "Network",
-      "Resistances",
-      "Default",
+    type: [
+      String
     ],
-    default: "Global",
+    enum: [
+      'Tools',
+      'Boards',
+      'Leds',
+      'Integrated',
+      'Accesories',
+      'Cables',
+      'Adapters',
+      'Network',
+      'Resistances',
+      'Default',
+    ],
+    default: 'Global',
   },
   amount: {
     type: Number,
     default: 1,
   },
-  reviews: [{ ref: "Review", type: mongoose.Types.ObjectId }],
-});
+  reviews: [
+    {
+      ref: 'Review',
+      type: mongoose.Types.ObjectId,
+    },
+  ],
+})
 
-module.exports = mongoose.model("Product", productsSchema);
+module.exports = mongoose.model('Product', productsSchema)

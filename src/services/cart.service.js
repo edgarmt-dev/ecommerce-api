@@ -1,9 +1,9 @@
-const CartModel = require("../models/cart");
-const Payment = require("./payment.service");
+const CartModel = require('../models/cart')
+const Payment = require('./payment.service')
 
 class CartService {
   constructor() {
-    this.paymentService = new Payment();
+    this.paymentService = new Payment()
   }
 
   /**
@@ -15,14 +15,15 @@ class CartService {
     try {
       const cart = await CartModel.create({
         idUser,
-        items: [],
-      });
-      return cart;
+        items: [
+        ],
+      })
+      return cart
     } catch (error) {
       return {
         success: false,
         error: error.message,
-      };
+      }
     }
   }
 
@@ -35,13 +36,16 @@ class CartService {
     try {
       const items = await CartModel.findOne({
         idUser: idUser,
-      }).populate("items.product");
-      return { success: true, data: items };
+      }).populate('items.product')
+      return {
+        success: true,
+        data: items,
+      }
     } catch (error) {
       return {
         success: false,
         error: error.message,
-      };
+      }
     }
   }
 
@@ -51,38 +55,39 @@ class CartService {
    * @returns
    */
   async getOneCart(idUser) {
-    const { items } = await CartModel.findOne({
+    const {
+      items
+    } = await CartModel.findOne({
       idUser: idUser,
-    }).populate("items.product");
+    }).populate('items.product')
 
-    return items;
+    return items
   }
 
   // TODO: Verify services and flow
   async getProductInOneCart(idUser, idProduct) {
     try {
-      const items = await this.getOneCart(idUser);
+      const items = await this.getOneCart(idUser)
       if (items.length > 0) {
-        const product = items.filter((item) => item.product.id === idProduct);
+        const product = items.filter((item) => item.product.id === idProduct)
         if (product) {
           return {
             exists: true,
             product: product[0],
-          };
+          }
         }
         return {
           exists: false,
-        };
+        }
       }
       return {
-        message: "No products",
-      };
+        message: 'No products',
+      }
     } catch (error) {
-      console.log("ERROR", error);
       return {
         success: false,
         error: error.message,
-      };
+      }
     }
   }
 
@@ -95,21 +100,23 @@ class CartService {
    */
   async addToCart(idUser, idProduct, amount) {
     try {
-      const { exists, product } = await this.getProductInOneCart(
+      const {
+        exists, product
+      } = await this.getProductInOneCart(
         idUser,
-        idProduct
-      );
+        idProduct,
+      )
       if (exists) {
         const result = await this.increaseAmount(
           idUser,
           idProduct,
           amount,
-          product
-        );
+          product,
+        )
         return {
           success: true,
           result,
-        };
+        }
       }
       const result = await CartModel.findOneAndUpdate(
         {
@@ -125,18 +132,18 @@ class CartService {
         },
         {
           new: true,
-        }
-      ).populate("items.product");
+        },
+      ).populate('items.product')
 
       return {
         success: true,
         result,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         error: error.message,
-      };
+      }
     }
   }
 
@@ -150,11 +157,11 @@ class CartService {
    */
   async increaseAmount(idUser, idProduct, amount, product) {
     try {
-      const newAmount = product.amount + amount;
-      const items = await this.getOneCart(idUser);
+      const newAmount = product.amount + amount
+      const items = await this.getOneCart(idUser)
       const productsInCart = items.filter(
-        (item) => item.product.id !== idProduct
-      );
+        (item) => item.product.id !== idProduct,
+      )
 
       const result = await CartModel.findOneAndUpdate(
         {
@@ -171,17 +178,16 @@ class CartService {
         },
         {
           new: true,
-        }
-      ).populate("items.product");
+        },
+      ).populate('items.product')
 
-      return result;
+      return result
     } catch (error) {
       // TODO: fix error
-      console.log("ERROR", error);
       return {
         success: false,
         error: error.message,
-      };
+      }
     }
   }
 
@@ -206,18 +212,18 @@ class CartService {
         },
         {
           new: true,
-        }
-      ).populate("items.product");
+        },
+      ).populate('items.product')
 
       return {
         success: true,
         result,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         error: error.message,
-      };
+      }
     }
   }
 
@@ -229,33 +235,35 @@ class CartService {
    */
   async pay(idUser, stripeCustomerID) {
     try {
-      const { items } = await this.getItems(idUser);
+      const {
+        items
+      } = await this.getItems(idUser)
       const total =
         items.reduce(
           (result, item) => result + item.product.price * item.amount,
-          0
-        ) * 100;
+          0,
+        ) * 100
 
       if (total > 0) {
         const clientSecret = await this.paymentService.createIntent(
           total,
           idUser,
-          stripeCustomerID
-        );
+          stripeCustomerID,
+        )
         return {
           success: true,
           clientSecret,
-        };
+        }
       }
       return {
         success: false,
-        message: "Value invalid",
-      };
+        message: 'Value invalid',
+      }
     } catch (error) {
       return {
         success: false,
         error: error.message,
-      };
+      }
     }
   }
 
@@ -272,22 +280,23 @@ class CartService {
         },
         {
           $pullAll: {
-            items: [],
+            items: [
+            ],
           },
-        }
-      );
+        },
+      )
 
       return {
         success: true,
         cart,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         error: error.message,
-      };
+      }
     }
   }
 }
 
-module.exports = CartService;
+module.exports = CartService

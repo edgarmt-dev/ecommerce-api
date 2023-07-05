@@ -2,18 +2,18 @@
 // 	stripeSK
 // } = require("../config")
 // const stripe = require("stripe")(stripeSK)
-const hasErrors = require("../helpers/errors/hasErrors");
-const pagination = require("../libs/pagination");
-const ProductModel = require("../models/product");
-const ReviewModel = require("../models/reviews");
-const Cart = require("./cart.service");
-const Payment = require("./payment.service");
-const uploadFiles = require("../libs/uploadFiles");
+const hasErrors = require('../helpers/errors/hasErrors')
+const pagination = require('../libs/pagination')
+const ProductModel = require('../models/product')
+const ReviewModel = require('../models/reviews')
+const Cart = require('./cart.service')
+const Payment = require('./payment.service')
+const uploadFiles = require('../libs/uploadFiles')
 
 class ProductService {
   constructor() {
-    this.cartService = new Cart();
-    this.paymentService = new Payment();
+    this.cartService = new Cart()
+    this.paymentService = new Payment()
   }
 
   /**
@@ -24,12 +24,12 @@ class ProductService {
    */
   async getAll(limit = 20, page = 1) {
     try {
-      return await pagination(limit, page, ProductModel, "/api/products");
+      return await pagination(limit, page, ProductModel, '/api/products')
     } catch (error) {
       return {
         success: false,
         error,
-      };
+      }
     }
   }
 
@@ -40,19 +40,29 @@ class ProductService {
    * @param {number} page
    * @returns
    */
-  async getProductsByCategory(cat, limit = 20, page = 1) {
+  async getProductsByCategory(cat) {
     try {
       // return await pagination(limit, page, ProductModel, "/api/products");
-      console.log(cat, limit, page);
       const response = await ProductModel.find({
         categories: cat,
       }).populate({
-        path: "reviews",
-        populate: [{ path: "idUser", select: "name lastName country" }],
-      });
-      return { success: true, data: response };
+        path: 'reviews',
+        populate: [
+          {
+            path: 'idUser',
+            select: 'name lastName country',
+          },
+        ],
+      })
+      return {
+        success: true,
+        data: response,
+      }
     } catch (error) {
-      return { succes: false, error };
+      return {
+        succes: false,
+        error,
+      }
     }
   }
 
@@ -66,18 +76,23 @@ class ProductService {
       const product = await ProductModel.findOne({
         _id: id,
       }).populate({
-        path: "reviews",
-        populate: [{ path: "idUser", select: "name lastName country" }],
-      });
+        path: 'reviews',
+        populate: [
+          {
+            path: 'idUser',
+            select: 'name lastName country',
+          },
+        ],
+      })
       return {
         success: true,
         product,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         error,
-      };
+      }
     }
   }
 
@@ -89,22 +104,25 @@ class ProductService {
    */
   async createProduct(data, files) {
     try {
-      const { success, imagesURl } = await this.#uploadImages(files);
+      const {
+        success, imagesURl
+      } = await this.#uploadImages(files)
 
-      if (!success)
-        throw new Error("Error", {
-          error: "Images not uploaded",
-        });
+      if (!success) {
+        throw new Error('Error', {
+          error: 'Images not uploaded',
+        })
+      }
 
-      data.imgURL = imagesURl;
-      data.categories = data.categories.split(",");
-      const product = await ProductModel.create(data);
+      data.imgURL = imagesURl
+      data.categories = data.categories.split(',')
+      const product = await ProductModel.create(data)
       return {
         success: true,
         product,
-      };
+      }
     } catch (error) {
-      return hasErrors(error);
+      return hasErrors(error)
     }
   }
 
@@ -117,19 +135,19 @@ class ProductService {
     try {
       const imagesURl = await Promise.all(
         images.map(async (image) => {
-          const response = await uploadFiles(image.path);
-          return response.url;
-        })
-      );
+          const response = await uploadFiles(image.path)
+          return response.url
+        }),
+      )
       return {
         success: true,
         imagesURl,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         error,
-      };
+      }
     }
   }
 
@@ -140,19 +158,19 @@ class ProductService {
    */
   async addReview(data) {
     try {
-      const response = await ReviewModel.create(data);
+      const response = await ReviewModel.create(data)
       const updateProduct = await this.addReviewToProductById(
         data.idProduct,
-        response._id
-      );
+        response._id,
+      )
       if (updateProduct.success) {
         return {
           success: true,
           response,
-        };
+        }
       }
     } catch (error) {
-      return hasErrors(error);
+      return hasErrors(error)
     }
   }
   /**
@@ -164,18 +182,22 @@ class ProductService {
   async addReviewToProductById(idProduct, idReview) {
     try {
       const response = await ProductModel.findOneAndUpdate(
-        { _id: idProduct },
         {
-          $push: { reviews: idReview },
-        }
-      );
+          _id: idProduct,
+        },
+        {
+          $push: {
+            reviews: idReview,
+          },
+        },
+      )
 
       return {
         success: true,
         response,
-      };
+      }
     } catch (error) {
-      return hasErrors(error);
+      return hasErrors(error)
     }
   }
 
@@ -188,31 +210,33 @@ class ProductService {
    */
   async pay(idUser, stripeCustomerID, idProduct) {
     try {
-      const { product } = await this.getOne(idProduct);
-      const price = product.price;
+      const {
+        product
+      } = await this.getOne(idProduct)
+      const price = product.price
 
       if (price > 0) {
         const clientSecret = await this.paymentService.createIntent(
           price,
           idUser,
-          stripeCustomerID
-        );
+          stripeCustomerID,
+        )
         return {
           success: true,
           clientSecret,
-        };
+        }
       }
 
       return {
         success: false,
-      };
+      }
     } catch (error) {
       return {
         success: false,
         error: error.message,
-      };
+      }
     }
   }
 }
 
-module.exports = ProductService;
+module.exports = ProductService

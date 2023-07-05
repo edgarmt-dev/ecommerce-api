@@ -1,20 +1,45 @@
 {
   "env": {
+    "browser": true,
     "commonjs": true,
     "es2021": true,
     "node": true
   },
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "prettier"],
   "overrides": [],
   "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module"
+    "ecmaVersion": "latest"
   },
   "rules": {
     "indent": ["error", 2],
-    "default-case": "off",
-    "quotes": ["error", "double"],
-    "semi": "warn",
-    "no-unused-vars": "error"
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "never"],
+    // Aditional rules
+    "camelcase": "error",
+    "curly": "error",
+    "default-case": "error",
+    "eqeqeq": "error",
+    "no-console": "warn",
+    "no-duplicate-imports": "error",
+    "no-new-func": "error",
+    "no-return-await": "error",
+    "no-unused-vars": "warn",
+    "no-var": "error",
+    "spaced-comment": "error",
+    // Code Style
+    "array-bracket-newline": ["error", "always"],
+    "array-element-newline": ["error", "consistent"],
+    "arrow-spacing": "error",
+    "block-spacing": "error",
+    "brace-style": ["error", "1tbs"],
+    "comma-spacing": "error",
+    "keyword-spacing": "error",
+    "no-extra-parens": "error",
+    "no-multi-spaces": "error",
+    "no-multiple-empty-lines": "error",
+    "no-trailing-spaces": "error",
+    "object-curly-newline": ["error", "always"],
+    "object-property-newline": "error"
   }
 }
