@@ -39,8 +39,9 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.4.2",
     "eslint": "^8.23.1",
+    "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.1",
     "nodemon": "^2.0.16",
-    "prettier": "^2.7.1"
+    "prettier": "2.8.8"
   }
 }

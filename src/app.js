@@ -22,6 +22,7 @@ const cart = require("./routes/cart.router");
 const product = require("./routes/product.router");
 const payments = require("./routes/payments.router");
 const webhooks = require("./routes/webhooks");
+const balance = require("./routes/admin/balance.router");
 
 // Middlewares
 app.use(morgan("dev"));
@@ -60,6 +61,9 @@ cart(app);
 product(app);
 payments(app);
 webhooks(app);
+
+//Admin routers
+balance(app);
 
 app.get("/", (req, res) => {
   const data = {
