@@ -1,31 +1,33 @@
-const { Router } = require("express");
-const authValidation = require("../middlewares/auth");
-const ProductService = require("../services/product.service");
-const ProductController = require("../controllers/product.controller");
-const upload = require("../libs/multer");
+const {
+  Router
+} = require('express')
+const authValidation = require('../middlewares/auth')
+const ProductService = require('../services/product.service')
+const ProductController = require('../controllers/product.controller')
+const upload = require('../libs/multer')
 
 function product(app) {
-  const router = Router();
-  const productService = new ProductService();
-  const productController = new ProductController(productService);
+  const router = Router()
+  const productService = new ProductService()
+  const productController = new ProductController(productService)
 
-  app.use("/api/products", router);
+  app.use('/api/products', router)
 
-  router.get("/", productController.getAll);
-  router.get("/:id", productController.getOneById);
-  router.get("/categories/type", productController.getByCategory);
+  router.get('/', productController.getAll)
+  router.get('/:id', productController.getOneById)
+  router.get('/categories/type', productController.getByCategory)
   router.post(
-    "/create",
+    '/create',
     authValidation(10),
-    upload.array("img"),
+    upload.array('img'),
     productController.create,
-  );
-  router.post("/add-review", authValidation(1), productController.addReview);
+  )
+  router.post('/add-review', authValidation(1), productController.addReview)
   router.get(
-    "/pay/:idProduct",
+    '/pay/:idProduct',
     authValidation(1),
     productController.payProduct,
-  );
+  )
 }
 
-module.exports = product;
+module.exports = product

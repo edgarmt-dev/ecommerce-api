@@ -1,8 +1,8 @@
-require("dotenv").config();
+require('dotenv').config()
 
 const config = {
-  production: process.env.NODE_ENV === "production",
-  development: process.env.NODE_ENV === "development",
+  production: process.env.NODE_ENV === 'production',
+  development: process.env.NODE_ENV === 'development',
   port: process.env.PORT,
   dbUsername: process.env.DB_USERNAME,
   dbPassword: process.env.DB_PASSWORD,
@@ -26,6 +26,6 @@ const config = {
   cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
   cloudinaryApiKey: process.env.CLOUINARY_API_KEY,
   cloudinaryApiSecret: process.env.CLOUINARY_API_SECRET,
-};
+}
 
-module.exports = config;
+module.exports = config

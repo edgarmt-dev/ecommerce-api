@@ -1,11 +1,13 @@
-const User = require("./user.service");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { jwtSecret } = require("../config");
+const User = require('./user.service')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const {
+  jwtSecret
+} = require('../config')
 
 class AuthService {
   constructor() {
-    this.userService = new User();
+    this.userService = new User()
   }
 
   /**
@@ -15,27 +17,31 @@ class AuthService {
    */
   async logIn(credentials) {
     try {
-      const { email, password } = credentials;
-      const result = await this.userService.getOneByEmail(email);
+      const {
+        email, password
+      } = credentials
+      const result = await this.userService.getOneByEmail(email)
       if (!result.user) {
         return {
           success: false,
-          message: "User not found",
-        };
+          message: 'User not found',
+        }
       }
 
-      const compare = await this.#compare(password, result.user.password);
+      const compare = await this.#compare(password, result.user.password)
 
       if (!compare) {
         return {
           success: false,
-          message: ["Invalid credentials"],
-        };
+          message: [
+            'Invalid credentials'
+          ],
+        }
       }
-      const resp = this.#buildUserData(result.user);
-      return resp;
+      const resp = this.#buildUserData(result.user)
+      return resp
     } catch (error) {
-      return error;
+      return error
     }
   }
 
@@ -46,17 +52,17 @@ class AuthService {
    */
   async register(data) {
     if (data && data.password) {
-      data.password = await this.#encrypt(data.password);
+      data.password = await this.#encrypt(data.password)
     }
     data.provider = {
       local: true,
-    };
-    const result = await this.userService.create(data);
+    }
+    const result = await this.userService.create(data)
 
     if (!result.success) {
-      return result;
+      return result
     }
-    return this.#buildUserData(result.user);
+    return this.#buildUserData(result.user)
   }
 
   async authWithProvider(data) {
@@ -66,12 +72,12 @@ class AuthService {
       profilePic: data.photos[0].value,
       email: data.emails[0].value,
       name: data.displayName,
-    };
-    const result = await this.userService.getOrCreateByProvider(user);
-    if (result.success) {
-      return this.#buildUserData(result);
     }
-    return result;
+    const result = await this.userService.getOrCreateByProvider(user)
+    if (result.success) {
+      return this.#buildUserData(result)
+    }
+    return result
   }
 
   /**
@@ -90,8 +96,8 @@ class AuthService {
       idProvider: user.idProvider,
       stripeCustomerID: user.stripeCustomerID,
       country: user.country,
-    };
-    return this.#getToken(data);
+    }
+    return this.#getToken(data)
   }
 
   /**
@@ -100,9 +106,9 @@ class AuthService {
    * @returns
    */
   async #encrypt(password) {
-    const salt = await bcrypt.genSalt(10);
-    const res = await bcrypt.hash(password, salt);
-    return res;
+    const salt = await bcrypt.genSalt(10)
+    const res = await bcrypt.hash(password, salt)
+    return res
   }
 
   /**
@@ -112,8 +118,8 @@ class AuthService {
    * @returns
    */
   async #compare(password, passwordEncrypt) {
-    const res = await bcrypt.compare(password, passwordEncrypt);
-    return res;
+    const res = await bcrypt.compare(password, passwordEncrypt)
+    return res
   }
 
   /**
@@ -123,14 +129,14 @@ class AuthService {
    */
   #getToken(user) {
     const token = jwt.sign(user, jwtSecret, {
-      expiresIn: "2d",
-    });
+      expiresIn: '2d',
+    })
     return {
       success: true,
       user,
       token,
-    };
+    }
   }
 }
 
-module.exports = AuthService;
+module.exports = AuthService
