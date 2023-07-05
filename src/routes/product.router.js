@@ -18,13 +18,13 @@ function product(app) {
     "/create",
     authValidation(10),
     upload.array("img"),
-    productController.create
+    productController.create,
   );
   router.post("/add-review", authValidation(1), productController.addReview);
   router.get(
     "/pay/:idProduct",
     authValidation(1),
-    productController.payProduct
+    productController.payProduct,
   );
 }
 

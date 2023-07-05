@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const app = require("./src/app");
 const { port } = require("./src/config");
 const { connection } = require("./src/config/db");

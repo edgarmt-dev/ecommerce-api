@@ -21,7 +21,6 @@ class AuthController {
   };
 
   getCookies = (req, res) => {
-    console.log("cookies", req.cookies);
     const { cookieName } = req.query;
     const data = {
       token: req.cookies[cookieName],

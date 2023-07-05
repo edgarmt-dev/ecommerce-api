@@ -37,7 +37,7 @@ class ProductController {
     const result = await this.productService.pay(
       req.user.id,
       req.user.stripeCustomerID,
-      req.params.idProduct
+      req.params.idProduct,
     );
     return res.status(result.code ? result.code : 200).json(result);
   };

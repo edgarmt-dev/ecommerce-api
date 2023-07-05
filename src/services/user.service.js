@@ -54,7 +54,6 @@ class User {
         stripeCustomerID,
       });
       await this.cartService.create(user._id);
-      console.log("USER", user);
 
       return {
         success: true,
@@ -129,7 +128,7 @@ class User {
       },
       {
         new: true,
-      }
+      },
     );
 
     return {

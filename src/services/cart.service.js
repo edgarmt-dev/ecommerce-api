@@ -36,7 +36,10 @@ class CartService {
       const items = await CartModel.findOne({
         idUser: idUser,
       }).populate("items.product");
-      return { success: true, data: items };
+      return {
+        success: true,
+        data: items,
+      };
     } catch (error) {
       return {
         success: false,
@@ -78,7 +81,6 @@ class CartService {
         message: "No products",
       };
     } catch (error) {
-      console.log("ERROR", error);
       return {
         success: false,
         error: error.message,
@@ -97,14 +99,14 @@ class CartService {
     try {
       const { exists, product } = await this.getProductInOneCart(
         idUser,
-        idProduct
+        idProduct,
       );
       if (exists) {
         const result = await this.increaseAmount(
           idUser,
           idProduct,
           amount,
-          product
+          product,
         );
         return {
           success: true,
@@ -125,7 +127,7 @@ class CartService {
         },
         {
           new: true,
-        }
+        },
       ).populate("items.product");
 
       return {
@@ -153,7 +155,7 @@ class CartService {
       const newAmount = product.amount + amount;
       const items = await this.getOneCart(idUser);
       const productsInCart = items.filter(
-        (item) => item.product.id !== idProduct
+        (item) => item.product.id !== idProduct,
       );
 
       const result = await CartModel.findOneAndUpdate(
@@ -171,13 +173,12 @@ class CartService {
         },
         {
           new: true,
-        }
+        },
       ).populate("items.product");
 
       return result;
     } catch (error) {
       // TODO: fix error
-      console.log("ERROR", error);
       return {
         success: false,
         error: error.message,
@@ -206,7 +207,7 @@ class CartService {
         },
         {
           new: true,
-        }
+        },
       ).populate("items.product");
 
       return {
@@ -233,14 +234,14 @@ class CartService {
       const total =
         items.reduce(
           (result, item) => result + item.product.price * item.amount,
-          0
+          0,
         ) * 100;
 
       if (total > 0) {
         const clientSecret = await this.paymentService.createIntent(
           total,
           idUser,
-          stripeCustomerID
+          stripeCustomerID,
         );
         return {
           success: true,
@@ -274,7 +275,7 @@ class CartService {
           $pullAll: {
             items: [],
           },
-        }
+        },
       );
 
       return {

@@ -28,7 +28,7 @@ const useGoogleStrategy = () => {
       clientSecret: oAuhtClientSecret,
       callbackURL: asignCallbackURL("google"),
     },
-    getProfile
+    getProfile,
   );
 };
 
@@ -40,7 +40,7 @@ const useFacebookStrategy = () => {
       callbackURL: asignCallbackURL("facebook"),
       profileFields: ["id", "displayName", "photos", "emails"],
     },
-    getProfile
+    getProfile,
   );
 };
 
@@ -52,7 +52,7 @@ const useGitHubStrategy = () => {
       callbackURL: asignCallbackURL("github"),
       scope: ["user:email"],
     },
-    getProfile
+    getProfile,
   );
 };
 

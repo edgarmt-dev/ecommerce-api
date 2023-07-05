@@ -20,7 +20,7 @@ function auth(app) {
     "/google",
     passport.authenticate("google", {
       scope: ["email", "profile"],
-    })
+    }),
   );
   router.get(
     "/google/callback",
@@ -28,14 +28,14 @@ function auth(app) {
       session: false,
       failureRedirect: "/",
     }),
-    authController.loginWhitProvider
+    authController.loginWhitProvider,
   );
 
   router.get(
     "/facebook",
     passport.authenticate("facebook", {
       scope: ["email"],
-    })
+    }),
   );
   router.get(
     "/facebook/callback",
@@ -43,14 +43,14 @@ function auth(app) {
       session: false,
       failureRedirect: "/",
     }),
-    authController.loginWhitProvider
+    authController.loginWhitProvider,
   );
 
   router.get(
     "/github",
     passport.authenticate("github", {
       scope: ["user:email"],
-    })
+    }),
   );
   router.get(
     "/github/callback",
@@ -58,7 +58,7 @@ function auth(app) {
       failureRedirect: "/",
       session: false,
     }),
-    authController.loginWhitProvider
+    authController.loginWhitProvider,
   );
 }
 

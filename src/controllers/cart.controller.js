@@ -13,7 +13,7 @@ class CartController {
     const response = await this.cartService.addToCart(
       req.user.id,
       idProduct,
-      amount
+      amount,
     );
     return this.returnResponse(res, response);
   };
@@ -22,7 +22,7 @@ class CartController {
     const { idProduct } = req.body;
     const response = await this.cartService.removeFromCart(
       req.user.id,
-      idProduct
+      idProduct,
     );
     return this.returnResponse(res, response);
   };
@@ -36,7 +36,7 @@ class CartController {
   payCart = async (req, res) => {
     const response = await this.cartService.pay(
       req.user.id,
-      req.user.stripeCustomerID
+      req.user.stripeCustomerID,
     );
     return this.returnResponse(res, response);
   };

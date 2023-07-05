@@ -30,7 +30,7 @@ app.use(
   "/api/webhooks/stripe",
   express.raw({
     type: "application/json",
-  })
+  }),
 );
 app.use(express.json());
 app.use(
@@ -41,7 +41,7 @@ app.use(
       "https://fixly.vercel.app",
     ],
     credentials: true,
-  })
+  }),
 );
 app.use(cookieParser(jwtSecret));
 app.use(passport.initialize());
@@ -62,7 +62,7 @@ product(app);
 payments(app);
 webhooks(app);
 
-//Admin routers
+// Admin routers
 balance(app);
 
 app.get("/", (req, res) => {
