@@ -25,6 +25,7 @@ const product = require('./routes/product.router')
 const payments = require('./routes/payments.router')
 const webhooks = require('./routes/webhooks')
 const balance = require('./routes/admin/balance.router')
+const customers = require('./routes/admin/customers.router')
 
 // Middlewares
 app.use(morgan('dev'))
@@ -63,6 +64,7 @@ cart(app)
 product(app)
 payments(app)
 webhooks(app)
+customers(app)
 
 // Admin routers
 balance(app)
