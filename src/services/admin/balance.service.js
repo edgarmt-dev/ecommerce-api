@@ -9,7 +9,7 @@ class BalanceService {
       const balance = await stripe.balance.retrieve()
       return {
         success: true,
-        balance,
+        balance: balance.available[0],
       }
     } catch (error) {
       return {
