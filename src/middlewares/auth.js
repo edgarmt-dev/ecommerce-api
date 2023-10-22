@@ -12,6 +12,7 @@ const authValidation = (role) => {
 
 const validateToken = (req, res, next) => {
   const token = req.cookies.token
+  console.log('TOKEN', token)
   if (!token) {
     return res.status(401).json({
       success: false,

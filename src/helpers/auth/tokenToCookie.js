@@ -26,11 +26,10 @@ function tokenToCookieLocal(res, result, statusCode) {
     } = result
     return res
       .cookie('token', token, {
-        httpOnly: false,
+        httpOnly: true,
         secure: production,
         sameSite: 'none',
         expires: new Date(new Date().setDate(new Date().getDate() + 7)),
-        path: '/',
       })
       .json(result.user)
   }
