@@ -127,6 +127,28 @@ class ProductService {
   }
 
   /**
+   *
+   * @param {string} idProduct
+   * @param {ProductModel} data
+   */
+  async updateProduct(data) {
+    try {
+      const product = await ProductModel.findByIdAndUpdate(data._id, {
+        ...data
+      }, {
+        new: true
+      })
+
+      return {
+        success: true,
+        product
+      }
+    } catch (error) {
+      return hasErrors(error)
+    }
+  }
+
+  /**
    * Private service to run upload array images
    * @param {File} images
    * @returns
