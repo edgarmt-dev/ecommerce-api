@@ -30,7 +30,7 @@ npm run dev
 
 Development: Open http://localhost:4000 with your browser to see some details.
 
-Production: Open https://fixly.onrender.com with your browser to see some details.
+Production: Open https://fixly-api.vercel.app with your browser to see some details.
 
 ## Set enviroment variables
 
