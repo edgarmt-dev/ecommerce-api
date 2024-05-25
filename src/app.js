@@ -44,7 +44,6 @@ app.use(
       'http://es.localhost:3000',
       'http://127.0.0.1:5500',
       'https://fixly.vercel.app',
-      'https://fixly-front.onrender.com'
     ],
     credentials: true,
   }),

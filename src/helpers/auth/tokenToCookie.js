@@ -29,6 +29,8 @@ function tokenToCookieLocal(res, result, statusCode) {
         httpOnly: true,
         secure: production,
         sameSite: 'none',
+        domain: '.vercel.app',
+        path: '/',
         expires: new Date(new Date().setDate(new Date().getDate() + 7)),
       })
       .json(result.user)
